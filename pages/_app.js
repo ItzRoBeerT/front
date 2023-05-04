@@ -1,6 +1,6 @@
 //import '@/styles/globals.css'
 
-import HeaderDefault from "@/components/model/header/HeaderDefault";
+import HeaderDefault from "@/components/shared/headers/HeaderDefault";
 
 function App({ Component, pageProps }) {
     return (
