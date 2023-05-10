@@ -2,7 +2,7 @@ import { useState } from "react";
 import { AppBar, Button, Tab, Tabs, Toolbar, Typography, useMediaQuery, useTheme } from "@mui/material";
 import AppleIcon from "@mui/icons-material/Apple";
 import CSS from "./HeaderDefault.module.scss";
-import DrawerComp from "./utils/DrawerComp";
+import DrawerComp from "./headerTools/DrawerComp";
 
 const PAGES = ["Products", "Services", "Contact Us", "About Us"];
 const HeaderDefault = () => {
@@ -12,7 +12,7 @@ const HeaderDefault = () => {
 
     return (
         <>
-            <AppBar className={CSS.appBar}>
+            <AppBar position="static" className={CSS.appBar}>
                 <Toolbar>
                     <AppleIcon />
                     {isMatch ? (
