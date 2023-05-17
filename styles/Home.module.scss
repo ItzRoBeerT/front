@@ -1,6 +1,6 @@
-.container{
-    display: flex;
-    justify-content: center;
+.container {
+    display: grid;
+    place-items: center;
     margin: auto;
     padding: 60px 0;
 }
