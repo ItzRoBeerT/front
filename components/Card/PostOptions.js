@@ -1,8 +1,8 @@
 import { Box, Button, ButtonGroup } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-const PostOptions = () => {
+import React, { memo } from "react";
+const PostOptions = memo(() => {
     return (
         <Box
             sx={{
@@ -24,6 +24,6 @@ const PostOptions = () => {
             </ButtonGroup>
         </Box>
     );
-};
+});
 
 export default PostOptions;

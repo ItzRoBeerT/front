@@ -19,7 +19,7 @@ const Post = React.memo(({ post }) => {
         <>
             {user ? (
                 <Card className={CSS.card}>
-                    <CardHeader avatar={<Avatar aria-label="recipe">{<Image loader={({ src }) => src} src={user.avatar} height={40} width={40} alt={user.name} />}</Avatar>} action={<IconButton aria-label="settings"></IconButton>} title={user?.nickname} subheader={moment(post.date).format("LL")} />
+                    <CardHeader avatar={<Avatar aria-label="recipe">{<Image loader={({ src }) => src} src={user.avatar} height={40} width={40} alt={user.name} priority />}</Avatar>} action={<IconButton aria-label="settings"></IconButton>} title={user?.nickname} subheader={moment(post.date).format("LL")} />
                     <CardContent>
                         <Typography variant="body2" color="text.secondary">
                             {post.content}
