@@ -11,3 +11,14 @@ export const getUserById  = async (id) => {
         return null;
     }
 };
+
+export const createNewUser = async (user) => {
+    try {
+        const res = await axios.post(`${BASE_URL}/user/createAccount`, user);
+        const newUser = res.data;
+        return newUser;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
