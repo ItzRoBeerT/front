@@ -1,7 +1,6 @@
-import "@/styles/globals.css";
+// import "@/styles/globals.css";
 import store from "@/store/index";
 import HeaderDefault from "@/components/shared/headers/HeaderDefault";
-import MiniHeader from "@/components/shared/headers/MiniHeader";
 import { Provider } from "react-redux";
 import React from "react";
 
@@ -11,7 +10,6 @@ function App({ Component, pageProps }) {
             <React.Suspense >
                 <HeaderDefault />
                 <main>
-                    <MiniHeader />
                     <Component {...pageProps} />
                 </main>
             </React.Suspense>

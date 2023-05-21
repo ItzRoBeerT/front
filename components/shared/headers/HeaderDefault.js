@@ -6,11 +6,13 @@ import DrawerComp from "./headerTools/DrawerComp";
 import ModalLogin from "@/components/Modal/ModalLogin";
 import { useSelector } from "react-redux";
 import UserAvatar from "./headerTools/UserAvatar";
+import { useRouter } from "next/router";
 
 const PAGES = ["Products", "Services", "Contact Us", "About Us"];
 const HeaderDefault = () => {
     const [value, setValue] = useState(0);
     const theme = useTheme();
+    const router = useRouter();
     const isMatch = useMediaQuery(theme.breakpoints.down("md"));
     const user = useSelector((state) => state.auth.user);
 
@@ -19,23 +21,9 @@ const HeaderDefault = () => {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const prueba = async () => {
-        // const token = localStorage.getItem("token");
-        // console.log(token);
-        // const config = {
-        //     headers: {
-        //         Authorization: `Bearer ${token}`,
-        //     },
-        // };
-        // try {
-        //     const res = await axios.get("http://localhost:3004/user/me", config);
-        //     console.log(res);
-        // } catch (error) {
-        //     console.error(error);
-        // }
-
-        console.log(user);
-    };
+    const handleRegister = () =>{
+        router.push("/register");
+    }
 
     return (
         <>
@@ -59,8 +47,8 @@ const HeaderDefault = () => {
                                     <Button className={CSS.btnLogin} variant="contained" onClick={handleOpen}>
                                         Login
                                     </Button>
-                                    <Button className={CSS.btnSignup} variant="contained" onClick={prueba}>
-                                        SignUp
+                                    <Button className={CSS.btnSignup} variant="contained" onClick={handleRegister}>
+                                        Register
                                     </Button>
                                     <ModalLogin show={open} handleClose={handleClose} />
                                 </div>

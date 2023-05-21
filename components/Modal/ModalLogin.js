@@ -1,25 +1,29 @@
-import { FormControl, InputLabel, Modal, Fade, Backdrop, Input, Button } from "@mui/material";
-import React, { useState } from "react";
 import axios from "axios";
-import CSS from "./ModalLogin.module.scss";
+import { FormControl, InputLabel, Modal, Fade, Backdrop, Input, Button } from "@mui/material";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import authSlice from "@/store/auth-slice";
+import CSS from "./ModalLogin.module.scss";
 
 const ModalLogin = ({ show, handleClose }) => {
+    //#region VARIABLESSTATES
     const [credentials, setCredentials] = useState({
         email: "",
         password: "",
     });
-
     const dispatch = useDispatch();
+    const router = useRouter();
+    //#endregion
 
+    //#region FUNCTIONS
     const handleChange = (e) => {
         setCredentials({
             ...credentials,
             [e.target.id]: e.target.value,
         });
     };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -31,11 +35,13 @@ const ModalLogin = ({ show, handleClose }) => {
                     localStorage.setItem("user", JSON.stringify(res.data.user));
                 }
                 dispatch(authSlice.actions.login(res.data.user));
+                router.push("/");
             }
         } catch (e) {
             console.log(e);
         }
     };
+    //#endregion
 
     return (
         <>
@@ -69,6 +75,9 @@ const ModalLogin = ({ show, handleClose }) => {
                         <Button type="submit" variant="contained" className={CSS.btn}>
                             Iniciar sesion
                         </Button>
+                        <small>
+                            Need an account? <Link href="/register" onClick={handleClose}>Register here</Link>
+                        </small>
                     </form>
                 </Fade>
             </Modal>
