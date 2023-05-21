@@ -2,10 +2,37 @@ import axios from "axios";
 import Image from "next/image";
 import { Avatar, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Logout, Settings } from "@mui/icons-material";
 import authSlice from "@/store/auth-slice";
 
+function stringToColor(string) {
+    let hash = 0;
+    let i;
+
+    /* eslint-disable no-bitwise */
+    for (i = 0; i < string.length; i += 1) {
+        hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    let color = "#";
+
+    for (i = 0; i < 3; i += 1) {
+        const value = (hash >> (i * 8)) & 0xff;
+        color += `00${value.toString(16)}`.slice(-2);
+    }
+    /* eslint-enable no-bitwise */
+
+    return color;
+}
+function stringAvatar(name) {
+    return {
+        sx: {
+            bgcolor: stringToColor(name),
+        },
+        children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+    };
+}
 const UserAvatar = () => {
     //#region VARIABLES
     const [anchorEl, setAnchorEl] = useState(null);
@@ -40,34 +67,6 @@ const UserAvatar = () => {
             console.error(error);
         }
     };
-
-    function stringToColor(string) {
-        let hash = 0;
-        let i;
-
-        /* eslint-disable no-bitwise */
-        for (i = 0; i < string.length; i += 1) {
-            hash = string.charCodeAt(i) + ((hash << 5) - hash);
-        }
-
-        let color = "#";
-
-        for (i = 0; i < 3; i += 1) {
-            const value = (hash >> (i * 8)) & 0xff;
-            color += `00${value.toString(16)}`.slice(-2);
-        }
-        /* eslint-enable no-bitwise */
-
-        return color;
-    }
-    function stringAvatar(name) {
-        return {
-            sx: {
-                bgcolor: stringToColor(name),
-            },
-            children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
-        };
-    }
     //#endregion
     return (
         <>
@@ -78,7 +77,7 @@ const UserAvatar = () => {
                             <Image loader={({ src }) => src} src={user.avatar} height={40} width={40} alt={user.name} priority />
                         </Avatar>
                     ) : (
-                        <Avatar {...stringAvatar('Antonio Gonzalez')} />
+                        <Avatar {...stringAvatar("Antonio Gonzalez")} />
                     )}
                 </IconButton>
             </Tooltip>

@@ -26,7 +26,7 @@ const Post = React.memo(({ post }) => {
                         </Typography>
                     </CardContent>
                     {post.image && <CardMedia component="img" alt="prueba" height="200" image={post.image} />}
-                    <PostOptions />
+                    <PostOptions post={post}/>
                 </Card>
             ) : (
                 <div>Loading...</div>
