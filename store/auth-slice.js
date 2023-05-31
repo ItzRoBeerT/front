@@ -2,10 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 let userToken = null;
 let user = null;
-if (typeof window !== "undefined") {
-    userToken = localStorage.getItem("token");
-    user = JSON.parse(localStorage.getItem("user"));
-}
 
 const authSlice = createSlice({
     name: "auth",
@@ -25,6 +21,11 @@ const authSlice = createSlice({
             state.userToken = localStorage.getItem("token");
             state.loading = false;
         },
+        autoLogin: (state) => {
+            state.user = JSON.parse(localStorage.getItem("user"));
+            state.userToken = localStorage.getItem("token");
+            state.loading = false;
+        }
     },
 });
 

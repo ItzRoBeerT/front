@@ -3,23 +3,28 @@ import { Box, Button, ButtonGroup } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import React, { memo, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
-const PostOptions = memo(({ post }) => {
+const PostOptions =({ post, usersPost }) => {
     //#region VARIABLES
     const user = useSelector((state) => state.auth.user);
-    const token = useSelector((state) => state.auth.userToken);
     const [isUserLikedPost, setIsUserLikedPost] = useState(false);
+    const token = useSelector((state) => state.auth.userToken);
+    const router = useRouter();
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     };
     //#endregion
-    console.log('isUserLikedPost', isUserLikedPost)
 
     //#region FUNCTIONS
+    useEffect(() => {
+        checkIfUserLikedPost(); 
+    }, []);
+
     const checkIfUserLikedPost = () => {
         if (user !== null && token !== null) {
             post.likedBy.forEach((like) => {
@@ -29,10 +34,7 @@ const PostOptions = memo(({ post }) => {
             setIsUserLikedPost(false);
         }
     };
-    useEffect(() => {
-        checkIfUserLikedPost();
-    }, [checkIfUserLikedPost]);
-
+ 
     const likePost = async () => {
         if (isUserLikedPost) {
             try {
@@ -52,6 +54,10 @@ const PostOptions = memo(({ post }) => {
             console.log(error);
         }
     };
+
+    const commentPost = () => {
+        router.push({ pathname: `/post/${post._id}`});
+    };
     //#endregion
 
     return (
@@ -67,12 +73,13 @@ const PostOptions = memo(({ post }) => {
         >
             <ButtonGroup variant="text" aria-label="text button group">
                 <Button onClick={likePost}>{!isUserLikedPost ? <FavoriteBorderIcon sx={{ color: "red" }} /> : <FavoriteIcon sx={{ color: "red" }} />}</Button>
-                <Button>
+                <Button onClick={commentPost}>
                     <ChatBubbleOutlineIcon />
                 </Button>
             </ButtonGroup>
         </Box>
     );
-});
+};
 
+PostOptions.displayName = "PostOptions";
 export default PostOptions;

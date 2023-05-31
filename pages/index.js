@@ -18,13 +18,14 @@ function Home({ posts }) {
     );
 }
 
-export async function getServerSideProps() {
+export const getServerSideProps = async () => {
     let allPosts = await obtenerTodosPosts();
     return {
         props: {
             posts: allPosts,
         },
     };
-}
+};
 
-export default React.memo(Home);
+Home.displayName = "Home";
+export default Home;

@@ -2,7 +2,7 @@ import axios from "axios";
 import Image from "next/image";
 import { Avatar, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Logout, Settings } from "@mui/icons-material";
 import authSlice from "@/store/auth-slice";
 
@@ -36,13 +36,12 @@ function stringAvatar(name) {
 const UserAvatar = () => {
     //#region VARIABLES
     const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
-    const dispatch = useDispatch();
     const user = useSelector((state) => state.auth.user);
     const token = useSelector((state) => state.auth.userToken);
+    const open = Boolean(anchorEl);
+    const dispatch = useDispatch();
     //#endregion
-    console.log("user", user);
-
+    
     //#region FUNCTIONS
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -82,35 +81,36 @@ const UserAvatar = () => {
                 </IconButton>
             </Tooltip>
 
-            <Menu
-                anchorEl={anchorEl}
-                id="account-menu"
-                open={open}
-                onClose={handleClose}
-                onClick={handleClose}
-                PaperProps={{
-                    elevation: 0,
-                }}
-                transformOrigin={{ horizontal: "right", vertical: "top" }}
-                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-            >
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-                <Divider />
-                <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <Settings fontSize="small" />
-                    </ListItemIcon>
-                    Settings
-                </MenuItem>
-                <MenuItem onClick={logout}>
-                    <ListItemIcon>
-                        <Logout fontSize="small" />
-                    </ListItemIcon>
-                    Logout
-                </MenuItem>
-            </Menu>
+                <Menu
+                    anchorEl={anchorEl}
+                    id="account-menu"
+                    open={open}
+                    onClose={handleClose}
+                    onClick={handleClose}
+                    PaperProps={{
+                        elevation: 0,
+                    }}
+                    transformOrigin={{ horizontal: "right", vertical: "top" }}
+                    anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                >
+                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                    <Divider />
+                    <MenuItem onClick={handleClose}>
+                        <ListItemIcon>
+                            <Settings fontSize="small" />
+                        </ListItemIcon>
+                        Settings
+                    </MenuItem>
+                    <MenuItem onClick={logout}>
+                        <ListItemIcon>
+                            <Logout fontSize="small" />
+                        </ListItemIcon>
+                        Logout
+                    </MenuItem>
+                </Menu>
         </>
     );
 };
 
+UserAvatar.displayName = "UserAvatar";
 export default UserAvatar;

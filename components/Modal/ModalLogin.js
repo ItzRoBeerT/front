@@ -85,4 +85,5 @@ const ModalLogin = ({ show, handleClose }) => {
     );
 };
 
+ModalLogin.dispatch = "ModalLogin";
 export default ModalLogin;
