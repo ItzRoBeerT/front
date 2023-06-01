@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Avatar, Card, CardContent, CardHeader, IconButton, Typography } from "@mui/material";
+import { Avatar, Card, CardContent, CardHeader, CardMedia, IconButton, Typography } from "@mui/material";
 import moment from "moment/moment";
 import { useState } from "react";
 import Comments from "./Comments";
@@ -25,7 +25,7 @@ const PostCard = ({ post, usersPost }) => {
                 {post.image && <CardMedia component="img" alt="prueba" height="200" image={post.image} />}
             </Card>
                 <Reply postId={post._id} onAddComents={handleComments}/>
-                <Comments comments={comments} />
+                <Comments comments={comments} userId={post.userId} onDeleteComments={handleComments} />
         </div>
     );
 };

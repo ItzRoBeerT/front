@@ -20,7 +20,6 @@ const Post = ({ post }) => {
         getUser();
     }, []);
 
-    console.log(user);
     return (
         <>
             {user ? (

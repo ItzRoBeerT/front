@@ -51,3 +51,20 @@ export const getPostById = async (postId) => {
 
     return post;
 }
+
+export const deleteComment = async (commentId, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    try {
+        const res = await axios.delete(BASE_URL + `post/deleteComment/${commentId}`, config);
+        if(res.status === 200){
+            return res.data;
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
