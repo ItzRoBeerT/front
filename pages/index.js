@@ -6,6 +6,7 @@ import CSS from "@/styles/Home.module.scss";
 import MiniHeader from "@/components/shared/headers/MiniHeader";
 
 function Home({ posts }) {
+    console.log({posts});
     return (
         <>
             <MiniHeader />

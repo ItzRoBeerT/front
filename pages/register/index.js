@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/components/Protected/ProtectedRoute";
 import FormRegister from "@/components/SignIn/FormRegister";
 
 const Register = () => {

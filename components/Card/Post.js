@@ -7,10 +7,10 @@ import { useSelector } from "react-redux";
 import {getUserById} from "@/api/users";
 import PostOptions from "./PostOptions";
 import CSS from "./Post.module.scss";
+import CustomAvatar from "../shared/headers/headerTools/CustomAvatar";
 
 const Post = ({ post }) => {
     const [user, setUser] = useState(null);
-
 
     useEffect(() => {
         const getUser = async () => {
@@ -25,11 +25,8 @@ const Post = ({ post }) => {
             {user ? (
                 <Card className={CSS.card}>
                     <CardHeader 
-                    avatar={
-                         <Avatar aria-label="recipe">
-                            {<Image loader={({ src }) => src} src={user.avatar} height={40} width={40} alt={user.name} priority />}
-                        </Avatar>} action={
-                            <IconButton aria-label="settings"> </IconButton>}
+                        avatar={<CustomAvatar user={user} />}
+                        action={ <IconButton aria-label="settings"> </IconButton>}
                         title={user?.nickname} 
                         subheader={moment(post.date).format("LL")} />
                     <CardContent>

@@ -1,6 +1,7 @@
 import { AppBar, Button, IconButton, Tab, Tabs, Toolbar, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useRouter } from "next/router";
 import AppleIcon from "@mui/icons-material/Apple";
+import SendIcon from '@mui/icons-material/Send';
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CSS from "./HeaderDefault.module.scss";
@@ -71,6 +72,9 @@ const HeaderDefault = () => {
                                 </div>
                             ) : (
                                 <div className={CSS.divProfile}>
+                                    <Button  variant="outlined" color="inherit" endIcon={<SendIcon />}>
+                                        what are you thinking?
+                                    </Button>
                                     <UserAvatar />
                                 </div>
                             )}

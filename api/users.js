@@ -22,3 +22,14 @@ export const createNewUser = async (user) => {
         return null;
     }
 }
+
+export const getUserByNickname = async (nickname) => {
+    try {
+        const res = await axios.get(`${BASE_URL}/user/nickname/${nickname}`);
+        const user = res.data;
+        return user;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}

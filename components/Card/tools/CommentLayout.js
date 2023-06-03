@@ -15,7 +15,8 @@ const CommentLayout = ({ comment, commentId, userId , onDeleteComments }) => {
     const token = useSelector((state) => state.auth.userToken);
 
     //FIXME muchos renders
-   console.log({commentId});
+    //console.log({commentId});
+    
     //#region FUNCTIONS
     useEffect(() => {
         const getUser = async () => {

@@ -1,5 +1,7 @@
-import Image from "next/image";
 import { Avatar, IconButton,Tooltip } from "@mui/material";
+import Image from "next/image";
+import { useRouter } from "next/router";
+
 
 function stringToColor(string) {
     let hash = 0;
@@ -31,8 +33,11 @@ function stringAvatar(name) {
 
 const CustomAvatar = ({user}) => {
  
+    const router = useRouter();
+
     const goToProfile = (event) => {
-        console.log("click");
+        event.preventDefault();
+        router.push(`/${user.nickname}`);
     };
     return (
         <>
