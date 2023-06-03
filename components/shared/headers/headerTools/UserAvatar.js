@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { Logout, Settings } from "@mui/icons-material";
 import authSlice from "@/store/auth-slice";
+import { useRouter } from "next/router";
 
 function stringToColor(string) {
     let hash = 0;
@@ -38,6 +39,7 @@ const UserAvatar = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const user = useSelector((state) => state.auth.user);
     const token = useSelector((state) => state.auth.userToken);
+    const router = useRouter();
     const open = Boolean(anchorEl);
     const dispatch = useDispatch();
     //#endregion
@@ -49,6 +51,11 @@ const UserAvatar = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const goToProfile = () => {
+        router.push("/"+user.nickname);
+        setAnchorEl(null);
+    };
+
 
     const logout = async () => {
         const config = {
@@ -93,7 +100,7 @@ const UserAvatar = () => {
                     transformOrigin={{ horizontal: "right", vertical: "top" }}
                     anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                 >
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                    <MenuItem onClick={goToProfile}>My account</MenuItem>
                     <Divider />
                     <MenuItem onClick={handleClose}>
                         <ListItemIcon>

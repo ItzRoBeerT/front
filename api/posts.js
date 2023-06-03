@@ -81,7 +81,6 @@ export const getUserPosts = async (userId) => {
 
 export const getPostsByNickname = async (nickname) => {
     let posts = null;
-    console.log(BASE_URL + `post/getByNickname/${nickname}`);
     try {
         const res = await fetch(BASE_URL + `post/getByNickname/${nickname}`);
         if (res.ok) {

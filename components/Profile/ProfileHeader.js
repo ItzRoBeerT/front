@@ -1,14 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { Avatar, Card, Divider, Typography } from '@mui/material';
+import { Button, Card, Divider, Typography } from '@mui/material';
 import CustomAvatar from '../shared/headers/headerTools/CustomAvatar';
 import ProfileTabs from './profileTools/ProfileTabs';
 import Post from '../Card/Post';
+import { useSelector } from 'react-redux';
 const ProfileHeader = ({ user, posts }) => {
-    console.log({ posts });
+
+    const actualUser = useSelector((state) => state.auth.user);
+
+    console.log({actualUser, user});
     return (
         <Card>
             <div className="avatar y editar o seguir">
                 <CustomAvatar user={user} />
+                {actualUser._id === user._id ? 
+                <Button variant="outlined">Editar perfil</Button>
+                    :
+                <Button variant="outlined">Seguir</Button>
+                }
             </div>
             <div className="nick y nombre">
                 <Typography>{user.name}</Typography>
