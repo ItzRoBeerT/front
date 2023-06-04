@@ -1,7 +1,7 @@
 import { Button, FormControl, FormLabel, Input, TextField } from "@mui/material";
+import Image from "next/image";
 import { useState } from "react";
 import { createNewUser } from "@/api/users";
-import Image from "next/image";
 
 const FormRegister = () => {
     //#region VARIABLES

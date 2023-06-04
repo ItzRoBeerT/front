@@ -94,3 +94,20 @@ export const getPostsByNickname = async (nickname) => {
 
     return posts;
 }
+
+export const createPost = async (post, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    try {
+        const res = await axios.post(BASE_URL + 'post/create', post, config);
+        if (res.status === 200) {
+            return res.data;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}

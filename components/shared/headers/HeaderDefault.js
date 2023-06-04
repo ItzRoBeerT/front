@@ -10,12 +10,14 @@ import ModalLogin from "@/components/Modal/ModalLogin";
 import UserAvatar from "./headerTools/UserAvatar";
 import SearchPostBar from "./headerTools/SearchPostBar";
 import authSlice from "@/store/auth-slice";
+import ModalComment from "@/components/Modal/ModalComment";
 
 const PAGES = ["Products", "Services", "Contact Us", "About Us"];
 const HeaderDefault = () => {
     //#region VARIABLES
     const [value, setValue] = useState(0);
     const [open, setOpen] = useState(false);
+    const [openComment, setOpenComment] = useState(false);
     const theme = useTheme();
     const router = useRouter();
     const isMatch = useMediaQuery(theme.breakpoints.down("md"));
@@ -32,6 +34,10 @@ const HeaderDefault = () => {
     const handleOpen = () => setOpen(true);
 
     const handleClose = () => setOpen(false);
+
+    const handleOpenComment = () => setOpenComment(true);
+
+    const handleCloseComment = () => setOpenComment(false);
 
     const handleRegister = () => {
         router.push("/register");
@@ -72,9 +78,10 @@ const HeaderDefault = () => {
                                 </div>
                             ) : (
                                 <div className={CSS.divProfile}>
-                                    <Button  variant="outlined" color="inherit" endIcon={<SendIcon />}>
+                                    <Button  variant="outlined" onClick={handleOpenComment} color="inherit" endIcon={<SendIcon />}>
                                         what are you thinking?
                                     </Button>
+                                    <ModalComment show={openComment} handleClose={handleCloseComment} />
                                     <UserAvatar />
                                 </div>
                             )}
