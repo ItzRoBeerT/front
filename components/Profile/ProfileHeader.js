@@ -1,21 +1,63 @@
-import { Button, Card, Divider, Typography } from '@mui/material';
-import CustomAvatar from '../shared/headers/headerTools/CustomAvatar';
+//#region IMPORTS
+import { Button, Card, Divider, List, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import ProfileTabs from './profileTools/ProfileTabs';
+import CustomAvatar from '../shared/headers/headerTools/CustomAvatar';
+import Follower from './profileTools/Follower';
+import { addFriend, deleteFriend } from '@/api/users';
 import Post from '../Card/Post';
-import { useSelector } from 'react-redux';
-const ProfileHeader = ({ user, posts }) => {
+import authSlice from '@/store/auth-slice';
+//#endregion
 
+const ProfileHeader = ({ user, posts, friends }) => {
+
+    const [tabsValue, setTabsValue] = useState(0);
+    const [isFollowing, setIsFollowing] = useState(false);
+    const dispatch = useDispatch();
     const actualUser = useSelector((state) => state.auth.user);
+    const token = useSelector((state) => state.auth.userToken);
 
-    console.log({actualUser, user});
+
+
+    //#region FUNCIONES
+    useEffect(() => {
+        actualUser?.friends.forEach((friend, index) => {
+            if (friend.friend === user._id) {
+                setIsFollowing(true);
+            }
+        });
+    }, []);
+
+    const handleChangeTabs = (event, newValue) => {
+        setTabsValue(newValue);
+    };
+    
+    const addFriendHandler = async () => {
+        const updatedUser = await addFriend(user._id, token);
+        setIsFollowing(true);
+        dispatch(authSlice.actions.updateUser(updatedUser.user))
+    };
+
+    const deleteFriendHandler = async () => {
+        const updatedUser = await deleteFriend(user._id, token);
+        setIsFollowing(false);
+        console.log(updatedUser);
+        dispatch(authSlice.actions.updateUser(updatedUser.user))
+    };
+
+    //#endregion
     return (
         <Card>
             <div className="avatar y editar o seguir">
                 <CustomAvatar user={user} />
-                {actualUser._id === user._id ? 
+                {actualUser?._id === user._id ? 
                 <Button variant="outlined">Editar perfil</Button>
                     :
-                <Button variant="outlined">Seguir</Button>
+                !isFollowing ? 
+                    <Button variant="outlined" onClick={addFriendHandler}>Seguir</Button>
+                    :
+                    <Button variant="outlined" onClick={deleteFriendHandler}>Dejar de seguir</Button>
                 }
             </div>
             <div className="nick y nombre">
@@ -31,14 +73,21 @@ const ProfileHeader = ({ user, posts }) => {
                 <Typography>siguiendo a {user.friends.length} personas </Typography>
             </div>
             <Divider />
-            <ProfileTabs />
+            <ProfileTabs onHandleTabs={handleChangeTabs} />
             
-            {/* posts */}
+            {tabsValue === 0 ?(
             <div>
                 {posts.map((post) => (
                     <Post key={post._id} post={post} />
                 ))}
             </div>
+            ):(
+            <List>
+                {friends.map((friend) => (
+                    <Follower friend={friend} />
+                ))}
+            </List>
+            )}
         </Card>
     );
 };

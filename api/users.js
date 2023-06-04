@@ -1,7 +1,7 @@
-import axios from "axios";
-const BASE_URL = "http://localhost:3004";
+import axios from 'axios';
+const BASE_URL = 'http://localhost:3004';
 
-export const getUserById  = async (id) => {
+export const getUserById = async (id) => {
     try {
         const res = await axios.get(`${BASE_URL}/user/${id}`);
         const user = res.data;
@@ -21,7 +21,7 @@ export const createNewUser = async (user) => {
         console.error(error);
         return null;
     }
-}
+};
 
 export const getUserByNickname = async (nickname) => {
     try {
@@ -32,4 +32,47 @@ export const getUserByNickname = async (nickname) => {
         console.error(error);
         return null;
     }
-}
+};
+
+export const getFriendsUserById = async (id) => {
+    try {
+        const res = await axios.get(`${BASE_URL}/user/getFriends/${id}`);
+        const friends = res.data;
+        return friends;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+};
+
+export const addFriend = async (friendId, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+    try {
+        const res = await axios.post(`${BASE_URL}/user/addFriend/${friendId}`, {}, config);
+        const user = res.data;
+        return user;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+};
+
+export const deleteFriend = async (friendId, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+    try {
+        const res = await axios.delete(`${BASE_URL}/user/deleteFriend/${friendId}`, config);
+        const user = res.data;
+        return user;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+};
