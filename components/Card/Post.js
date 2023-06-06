@@ -1,24 +1,50 @@
 import moment from "moment/moment";
-import { Avatar, Card, CardContent, CardHeader, CardMedia, IconButton, Typography } from "@mui/material";
-import Image from "next/image";
+import { Card, CardContent, CardHeader, CardMedia, IconButton, Menu, MenuItem, Typography } from "@mui/material";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-//import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { deletePost } from "@/api/posts";
 import {getUserById} from "@/api/users";
 import PostOptions from "./PostOptions";
 import CSS from "./Post.module.scss";
 import CustomAvatar from "../shared/headers/headerTools/CustomAvatar";
 
-const Post = ({ post }) => {
+const Post = ({ post, onDeletePost }) => {
     const [user, setUser] = useState(null);
+    const [PostDeleted, setPostDeleted] = useState(false);
+    const [isUsersPost, setIsUsersPost] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+    const actualUser = useSelector((state) => state.auth.user);
+    const token = useSelector((state) => state.auth.userToken);
 
+    //#region FUNCTIONS
     useEffect(() => {
         const getUser = async () => {
             let userFinded = await getUserById(post.userId);
             setUser(userFinded);
         };
+        if(actualUser?._id === post.userId) setIsUsersPost(true);
+        else setIsUsersPost(false);
+        
         getUser();
-    }, []);
+    }, [actualUser]);
+
+    const openMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const closeMenu = () => {
+        setAnchorEl(null);
+    };
+
+    const handleDeletePost = async () => {
+        const postDeleted = await deletePost(post._id, token);
+       onDeletePost(postDeleted);
+        closeMenu();  
+    };
+
+    //#endregion
 
     return (
         <>
@@ -26,7 +52,7 @@ const Post = ({ post }) => {
                 <Card className={CSS.card}>
                     <CardHeader 
                         avatar={<CustomAvatar user={user} />}
-                        action={ <IconButton aria-label="settings"> </IconButton>}
+                        action={ isUsersPost && <IconButton aria-label="settings" onClick={openMenu}><MoreVertIcon/> </IconButton>}
                         title={user?.nickname} 
                         subheader={moment(post.date).format("LL")} />
                     <CardContent>
@@ -40,6 +66,14 @@ const Post = ({ post }) => {
             ) : (
                 <div>Loading...</div>
             )}
+
+            <Menu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={closeMenu}
+            >
+                <MenuItem onClick={handleDeletePost}>Delete post</MenuItem>
+            </Menu>
         </>
     );
 };

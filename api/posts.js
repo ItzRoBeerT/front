@@ -111,3 +111,20 @@ export const createPost = async (post, token) => {
         console.log(error);
     }
 }
+
+export const deletePost = async (postId, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    try {
+        const res = await axios.delete(BASE_URL + `post/deletePost/${postId}`, config);
+        if (res.status === 200) {
+            return res.data;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};

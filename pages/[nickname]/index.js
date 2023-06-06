@@ -1,11 +1,20 @@
 import { getFriendsUserById, getUserByNickname } from "@/api/users";
 import { getPostsByNickname } from "@/api/posts";
 import ProfileHeader from "@/components/Profile/ProfileHeader";
+import { useState } from "react";
 
 const UserProfile = ({user, posts,friends}) => {
+
+    const [postsState, setPosts] = useState(posts);
+
+    const handleDeletePost = async (postDeleted) => {
+        const newPosts = posts.filter((post) => post._id !== postDeleted._id);
+        setPosts(newPosts);
+    };
+
     return (
         <div>
-            <ProfileHeader user={user} posts={posts} friends={friends}/>
+            <ProfileHeader user={user} posts={postsState} friends={friends} onDeletePost={handleDeletePost}/>
         </div>
     );
 };

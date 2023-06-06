@@ -1,7 +1,7 @@
 // import "@/styles/globals.css";
 import store from "@/store/index";
 import HeaderDefault from "@/components/shared/headers/HeaderDefault";
-import { Provider, } from "react-redux";
+import { Provider, useSelector, } from "react-redux";
 import React from "react";
 function App({ Component, pageProps }) {
 

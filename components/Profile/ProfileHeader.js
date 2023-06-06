@@ -10,7 +10,7 @@ import Post from '../Card/Post';
 import authSlice from '@/store/auth-slice';
 //#endregion
 
-const ProfileHeader = ({ user, posts, friends }) => {
+const ProfileHeader = ({ user, posts, friends, onDeletePost }) => {
 
     const [tabsValue, setTabsValue] = useState(0);
     const [isFollowing, setIsFollowing] = useState(false);
@@ -46,6 +46,8 @@ const ProfileHeader = ({ user, posts, friends }) => {
         dispatch(authSlice.actions.updateUser(updatedUser.user))
     };
 
+
+
     //#endregion
     return (
         <Card>
@@ -78,7 +80,7 @@ const ProfileHeader = ({ user, posts, friends }) => {
             {tabsValue === 0 ?(
             <div>
                 {posts.map((post) => (
-                    <Post key={post._id} post={post} />
+                    <Post key={post._id} post={post}  onDeletePost={onDeletePost}/>
                 ))}
             </div>
             ):(

@@ -69,6 +69,7 @@ const UserAvatar = () => {
             localStorage.removeItem("token");
             localStorage.removeItem("user");
             dispatch(authSlice.actions.logout());
+            router.push("/");
         } catch (error) {
             console.error(error);
         }
