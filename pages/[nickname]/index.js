@@ -1,7 +1,8 @@
+import { useState } from "react";
+import { Container } from "@mui/material";
 import { getFriendsUserById, getUserByNickname } from "@/api/users";
 import { getPostsByNickname } from "@/api/posts";
 import ProfileHeader from "@/components/Profile/ProfileHeader";
-import { useState } from "react";
 
 const UserProfile = ({user, posts,friends}) => {
 
@@ -13,9 +14,9 @@ const UserProfile = ({user, posts,friends}) => {
     };
 
     return (
-        <div>
+        <Container>
             <ProfileHeader user={user} posts={postsState} friends={friends} onDeletePost={handleDeletePost}/>
-        </div>
+        </Container>
     );
 };
 

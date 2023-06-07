@@ -1,11 +1,13 @@
 import ProtectedRoute from "@/components/Protected/ProtectedRoute";
 import FormRegister from "@/components/SignIn/FormRegister";
+import { Container } from "@mui/material";
+import CSS from './register.module.scss'
 
 const Register = () => {
     return (
-        <div>
+        <Container className={CSS.container}>
             <FormRegister />
-        </div>
+        </Container>
     );
 };
 

@@ -1,9 +1,11 @@
 import Image from "next/image";
-import { Avatar, Card, CardContent, CardHeader, CardMedia, IconButton, Typography } from "@mui/material";
+import { Avatar, Card, CardContent, CardHeader, CardMedia, Container, Divider, IconButton, Typography } from "@mui/material";
 import moment from "moment/moment";
 import { useState } from "react";
 import Comments from "./Comments";
 import Reply from "./Reply";
+import CustomAvatar from "../shared/headers/headerTools/CustomAvatar";
+import CSS from './PostCard.module.scss'
 
 const PostCard = ({ post, usersPost }) => {
 
@@ -14,19 +16,29 @@ const PostCard = ({ post, usersPost }) => {
     }
 
     return (
-        <div>
-            <Card>
-                <CardHeader avatar={<Avatar aria-label="recipe">{<Image loader={({ src }) => src} src={usersPost.avatar} height={40} width={40} alt={usersPost.name} priority unoptimized />}</Avatar>} action={<IconButton aria-label="settings" />} title={usersPost?.nickname} subheader={moment(post.date).format("LL")} />
-                <CardContent>
-                    <Typography variant="body2" color="text.secondary">
+        <Container className={CSS.content}>
+            <Card className={CSS.card}>
+                <CardHeader 
+                    className={CSS.cardHeader}
+                    avatar={<CustomAvatar user={usersPost} />} 
+                    action={<IconButton aria-label="settings" />} 
+                    title={usersPost?.nickname} 
+                    subheader={<span className={CSS.subheader}>{moment(post.date).format("LL")}</span>} 
+                 />
+                <CardContent className={CSS.cardContent}>
+                    <Typography variant="body2" className={CSS.text}>
                         {post.content}
                     </Typography>
                 </CardContent>
                 {post.image && <CardMedia component="img" alt="prueba" height="200" image={post.image} />}
             </Card>
+            <div className={CSS.dividerPadding}>
+             <Divider className={CSS.divider}/>
+            </div>
+                
                 <Reply postId={post._id} onAddComents={handleComments}/>
                 <Comments comments={comments} userId={post.userId} onDeleteComments={handleComments} />
-        </div>
+        </Container>
     );
 };
 

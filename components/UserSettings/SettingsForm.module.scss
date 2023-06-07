@@ -1,0 +1,59 @@
+.formControl {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.layoutInput {
+    color: white;
+}
+.layoutLabel {
+    color: rgb(41, 41, 190);
+}
+
+.inputName {
+    @extend .layoutInput;
+}
+
+.labelName {
+    @extend .layoutLabel;
+}
+
+.labelLastName {
+    @extend .layoutLabel;
+}
+
+.inputLastName {
+    @extend .layoutInput;
+}
+
+.labelEmail {
+    @extend .layoutLabel;
+}
+.inputEmail {
+    @extend .layoutInput;
+}
+
+.labelAge {
+    @extend .layoutLabel;
+}
+.inputAge {
+    @extend .layoutInput;
+}
+
+.labelPassword {
+    @extend .layoutLabel;
+}
+.inputPassword {
+    @extend .layoutInput;
+}
+
+.labelNickname {
+    color: rgb(41, 41, 190) !important;
+}
+.inputNickname {
+    color: white !important;
+    background-color: aliceblue;
+  
+}
+

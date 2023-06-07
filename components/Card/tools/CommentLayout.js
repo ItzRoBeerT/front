@@ -1,15 +1,18 @@
-import { IconButton, ListItem, ListItemAvatar, ListItemText, Menu, MenuItem } from "@mui/material";
+import { Divider, IconButton, ListItem, ListItemAvatar, ListItemText, Menu, MenuItem } from "@mui/material";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 import { getUserById } from "@/api/users";
 import { deleteComment } from "@/api/posts";
 import CustomAvatar from "@/components/shared/headers/headerTools/CustomAvatar";
+import CSS from './CommentLayout.module.scss'
 
 const CommentLayout = ({ comment, commentId, userId , onDeleteComments }) => {
     const [user, setUser] = useState({});
     const [isMyComment, setIsMyComment] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
+    const router = useRouter();
     const open = Boolean(anchorEl);
     const userLogged = useSelector((state) => state.auth.user);
     const token = useSelector((state) => state.auth.userToken);
@@ -43,14 +46,22 @@ const CommentLayout = ({ comment, commentId, userId , onDeleteComments }) => {
         onDeleteComments(res.comments);
         closeMenu();
     };
+
+    const goToProfile = (e) => {
+        if( e.target.tagName === "SPAN" )
+        router.push(`/${user.nickname}`);
+    };
+
     //#endregion
 
     return (
+        <>
+        <Divider className={CSS.divider} />
         <ListItem key={commentId}>
             <ListItemAvatar>
                 <CustomAvatar user={user} />
             </ListItemAvatar>
-            <ListItemText primary={"@" + user.nickname} secondary={comment} />
+            <ListItemText primary={"@" + user.nickname} onClick={goToProfile} secondary={comment} className={CSS.itemText}/>
             {isMyComment && (
                 <IconButton color="inherit" onClick={openMenu}>
                     <MoreIcon />
@@ -63,6 +74,7 @@ const CommentLayout = ({ comment, commentId, userId , onDeleteComments }) => {
                 <MenuItem onClick={handleDeleteComment}>Delete Comment</MenuItem>
             </Menu>
         </ListItem>
+        </>
     );
 };
 

@@ -76,3 +76,19 @@ export const deleteFriend = async (friendId, token) => {
         return null;
     }
 };
+
+export const updateUserInfo = async (user, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+    try {
+        const res = await axios.patch(`${BASE_URL}/user/update`, user, config);
+        const updatedUser = res.data;
+        return updatedUser;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}

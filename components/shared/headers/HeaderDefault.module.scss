@@ -1,6 +1,10 @@
-.appBar{
+.toolbar{
     background-color: #063970;
+    position: sticky;
+    top: 0;
+    overflow: visible !important;
 }
+
 
 .divProfile{
     display: flex;

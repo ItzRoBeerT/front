@@ -48,7 +48,7 @@ const HeaderDefault = () => {
     //#endregion
 
     return (
-            <AppBar position="static" className={CSS.appBar}>
+            <AppBar sx={{paddingRight: '0px !important'}} className={CSS.toolbar} >
                 <Toolbar>
                     <IconButton onClick={goToHome} sx={{ color: "white" }}>
                         <AppleIcon />
@@ -67,7 +67,7 @@ const HeaderDefault = () => {
                             </Tabs>
                             <SearchPostBar />
                             {!user ? (
-                                <div>
+                                <div className={CSS.divProfile}>
                                     <Button className={CSS.btnLogin} variant="contained" onClick={handleOpen}>
                                         Login
                                     </Button>

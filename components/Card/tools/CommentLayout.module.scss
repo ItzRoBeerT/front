@@ -1,0 +1,18 @@
+.itemText{
+    >span{
+        color:#3366BB;
+        display: inline;
+        cursor: pointer;
+        &:hover{
+            text-decoration: underline;
+            color: #3f7be4;
+        }
+    }
+    > p{
+        color: white;
+    }
+}
+
+.divider{
+    border-color: rgb(47, 51, 54);
+}

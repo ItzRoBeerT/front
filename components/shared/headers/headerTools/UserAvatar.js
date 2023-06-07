@@ -51,8 +51,14 @@ const UserAvatar = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
     const goToProfile = () => {
         router.push("/"+user.nickname);
+        setAnchorEl(null);
+    };
+
+    const goToSettings = () => {
+        router.push("/settings/"+user.nickname);
         setAnchorEl(null);
     };
 
@@ -103,7 +109,7 @@ const UserAvatar = () => {
                 >
                     <MenuItem onClick={goToProfile}>My account</MenuItem>
                     <Divider />
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem onClick={goToSettings}>
                         <ListItemIcon>
                             <Settings fontSize="small" />
                         </ListItemIcon>

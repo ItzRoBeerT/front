@@ -1,5 +1,6 @@
 import { Tab, Tabs } from "@mui/material";
 import { useState } from "react";
+import CSS from './ProfileTabs.module.scss'
 
 const ProfileTabs = ({onHandleTabs}) =>{
 
@@ -12,9 +13,9 @@ const ProfileTabs = ({onHandleTabs}) =>{
 
     
     return(
-        <Tabs value={value} onChange={handleChange}>
-            <Tab label='Posts' />
-            <Tab label='Siguiendo' />
+        <Tabs value={value} onChange={handleChange} className={CSS.container}>
+            <Tab className={CSS.tab} label='Posts' />
+            <Tab className={CSS.tab} label='Siguiendo' />
         </Tabs>
     )
 
