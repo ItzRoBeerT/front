@@ -13,7 +13,7 @@ import authSlice from "@/store/auth-slice";
 import ModalComment from "@/components/Modal/ModalComment";
 
 const PAGES = ["Products", "Services", "Contact Us", "About Us"];
-const HeaderDefault = () => {
+const HeaderDefault = ({onChangePosts}) => {
     //#region VARIABLES
     const [value, setValue] = useState(0);
     const [open, setOpen] = useState(false);

@@ -1,7 +1,7 @@
 import moment from "moment/moment";
 import { Card, CardContent, CardHeader, CardMedia, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { deletePost } from "@/api/posts";
 import {getUserById} from "@/api/users";
@@ -11,12 +11,12 @@ import CustomAvatar from "../shared/headers/headerTools/CustomAvatar";
 
 const Post = ({ post, onDeletePost }) => {
     const [user, setUser] = useState(null);
-    const [PostDeleted, setPostDeleted] = useState(false);
     const [isUsersPost, setIsUsersPost] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const actualUser = useSelector((state) => state.auth.user);
     const token = useSelector((state) => state.auth.userToken);
+    const postRef = useRef(null);
 
     //#region FUNCTIONS
     useEffect(() => {
@@ -40,7 +40,7 @@ const Post = ({ post, onDeletePost }) => {
 
     const handleDeletePost = async () => {
         const postDeleted = await deletePost(post._id, token);
-       onDeletePost(postDeleted);
+        onDeletePost(postDeleted);
         closeMenu();  
     };
 
@@ -49,7 +49,7 @@ const Post = ({ post, onDeletePost }) => {
     return (
         <>
             {user ? (
-                <Card className={CSS.card}>
+                <Card className={CSS.card} >
                     <CardHeader 
                         avatar={<CustomAvatar user={user} />}
                         action={ isUsersPost && <IconButton aria-label="settings" onClick={openMenu}><MoreVertIcon/> </IconButton>}

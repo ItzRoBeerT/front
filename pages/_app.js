@@ -9,7 +9,7 @@ function App({ Component, pageProps }) {
         <Provider store={store}>
             <HeaderDefault />
             <main>
-                <Component {...pageProps} />
+                <Component {...pageProps}  />
             </main>
         </Provider>
     );

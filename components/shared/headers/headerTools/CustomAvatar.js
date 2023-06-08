@@ -54,7 +54,7 @@ const CustomAvatar = ({user}) => {
                                 unoptimized />
                         </Avatar>
                     ) : (
-                        <Avatar {...stringAvatar("Antonio Gonzalez")} />
+                        <Avatar {...stringAvatar(user.name+ ' '+ user.lastName)} />
                     )}
                 </IconButton>
             </Tooltip>

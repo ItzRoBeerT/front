@@ -1,13 +1,15 @@
-import { Button, FormControl, FormLabel, IconButton, Input, TextField } from '@mui/material';
+import { Avatar, Button, FormControl, FormLabel, IconButton, Input, TextField } from '@mui/material';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { updateUserInfo } from '@/api/users';
 import CSS from './SettingsForm.module.scss';
+import UserAvatar from '../shared/headers/headerTools/UserAvatar';
 
 const SettingsForm = ({ user }) => {
     const [updates, setUpdates] = useState({});
+    const [avatar, setAvatar] = useState(null);
     const token = useSelector((state) => state.auth.userToken);
 
     //#region FUNCTIONS
@@ -24,6 +26,26 @@ const SettingsForm = ({ user }) => {
             ...updates,
             [e.target.id]: e.target.value,
         });
+    };
+
+    const onFileChange = (e) => {
+        if (e.target.files && e.target.files.length > 0) {
+            const file = e.target.files[0];
+            if (file.type.includes('image')) {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function load() {
+                    setUpdates({
+                        ...updates,
+                        avatar: reader.result,
+                    });
+                    setAvatar(reader.result);
+                };
+            } else {
+                delete updates.avatar;
+                setAvatar(null);
+            }
+        }
     };
 
     //#endregion
@@ -52,6 +74,18 @@ const SettingsForm = ({ user }) => {
                     inputProps={{ className: CSS.inputLastName }}
                     InputLabelProps={{ className: CSS.labelLastName }}
                 />
+                <FormLabel>Bio</FormLabel>
+                <TextField
+                    label="your bio"
+                    type="text"
+                    id="bio"
+                    defaultValue={user.bio}
+                    onChange={handleChange}
+                    inputProps={{ className: CSS.inputBio }}
+                    InputLabelProps={{ className: CSS.labelBio }}
+                />
+           
+              
                 <FormLabel>Age</FormLabel>
                 <TextField
                     label="your age"
@@ -94,12 +128,15 @@ const SettingsForm = ({ user }) => {
                     InputLabelProps={{ className: CSS.labelNickname }}
                 />
                 <IconButton>
-                    <br />
-                    {user.avatar && <Image src={user.avatar} width={200} height={200} alt={user.avatar} />}
-                    <br />
                     <IconButton component="label">
-                        <input type="file" hidden />
-                        <PermMediaIcon color="primary" />
+                        <input type="file" hidden onChange={onFileChange} />
+                        {avatar !== null ? (
+                            <Avatar src={avatar} sx={{width: '200px', height: '200px'}} width={200} height={200} alt={avatar} />
+                        ) : user.avatar ? (
+                            <Avatar src={user.avatar} sx={{width: '200px', height: '200px'}} width={200} height={200} alt={user.avatar} />
+                        ) : (
+                            <UserAvatar  isStringAvatar={false} />
+                        )}
                     </IconButton>
                 </IconButton>
                 <Button type="submit" variant="outlined">

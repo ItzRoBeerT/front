@@ -17,6 +17,21 @@ export const obtenerTodosPosts = async () => {
     return posts;
 };
 
+export const getRecentPosts = async (page) => {
+    let posts = null;
+
+    try {
+        const res = await axios.get(BASE_URL + 'post/getRecentPosts/'+page);
+        if (res.status === 200) {
+            posts = res.data;
+        }
+    } catch (error) {
+        console.error(error);
+    }
+
+    return posts;
+};
+
 export const addComment = async (postId, comment, token) => {
     const config = {
         headers: {
@@ -70,14 +85,14 @@ export const deleteComment = async (commentId, token) => {
 
 export const getUserPosts = async (userId) => {
     try {
-      const res = await axios.get(BASE_URL + `post/getByUserId/${userId}`);
-      if (res.status === 200) {
-        return await res.data;
-      }
+        const res = await axios.get(BASE_URL + `post/getByUserId/${userId}`);
+        if (res.status === 200) {
+            return await res.data;
+        }
     } catch (error) {
-      console.log(error);
+        console.log(error);
     }
-  };
+};
 
 export const getPostsByNickname = async (nickname) => {
     let posts = null;
@@ -93,7 +108,7 @@ export const getPostsByNickname = async (nickname) => {
     }
 
     return posts;
-}
+};
 
 export const createPost = async (post, token) => {
     const config = {
@@ -110,7 +125,7 @@ export const createPost = async (post, token) => {
     } catch (error) {
         console.log(error);
     }
-}
+};
 
 export const deletePost = async (postId, token) => {
     const config = {
@@ -128,3 +143,34 @@ export const deletePost = async (postId, token) => {
         console.log(error);
     }
 };
+
+export const searchPosts = async (searcText, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    try {
+        const res = await axios.get(BASE_URL + `post/search/${searcText}`, config);
+        if (res.status === 200) {
+            return res.data;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getPopularPosts = async () => {
+    let posts = null;
+    try {
+       const res = await axios.get(BASE_URL + 'post/popular');
+         if (res.status === 200) {
+            posts = res.data;
+        }
+    } catch (error) {
+        console.error(error);
+    }
+
+    return posts;
+}

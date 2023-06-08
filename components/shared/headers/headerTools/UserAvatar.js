@@ -1,11 +1,11 @@
-import axios from "axios";
-import Image from "next/image";
-import { Avatar, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { Logout, Settings } from "@mui/icons-material";
-import authSlice from "@/store/auth-slice";
-import { useRouter } from "next/router";
+import axios from 'axios';
+import Image from 'next/image';
+import { Avatar, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { Logout, Settings } from '@mui/icons-material';
+import authSlice from '@/store/auth-slice';
+import { useRouter } from 'next/router';
 
 function stringToColor(string) {
     let hash = 0;
@@ -16,7 +16,7 @@ function stringToColor(string) {
         hash = string.charCodeAt(i) + ((hash << 5) - hash);
     }
 
-    let color = "#";
+    let color = '#';
 
     for (i = 0; i < 3; i += 1) {
         const value = (hash >> (i * 8)) & 0xff;
@@ -30,11 +30,24 @@ function stringAvatar(name) {
     return {
         sx: {
             bgcolor: stringToColor(name),
+
         },
-        children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+        children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
     };
 }
-const UserAvatar = () => {
+function stringAvatarEdited(name) {
+    return {
+        sx: {
+            bgcolor: stringToColor(name),
+            width: '200px',
+            height: '200px',
+            fontSize: '80px',
+
+        },
+        children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+    };
+}
+const UserAvatar = ({ isStringAvatar = true }) => {
     //#region VARIABLES
     const [anchorEl, setAnchorEl] = useState(null);
     const user = useSelector((state) => state.auth.user);
@@ -43,7 +56,7 @@ const UserAvatar = () => {
     const open = Boolean(anchorEl);
     const dispatch = useDispatch();
     //#endregion
-    
+
     //#region FUNCTIONS
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -53,15 +66,14 @@ const UserAvatar = () => {
     };
 
     const goToProfile = () => {
-        router.push("/"+user.nickname);
+        router.push('/' + user.nickname);
         setAnchorEl(null);
     };
 
     const goToSettings = () => {
-        router.push("/settings/"+user.nickname);
+        router.push('/settings/' + user.nickname);
         setAnchorEl(null);
     };
-
 
     const logout = async () => {
         const config = {
@@ -70,12 +82,12 @@ const UserAvatar = () => {
             },
         };
         try {
-            const res = await axios.post("http://localhost:3004/user/logout", null, config);
+            const res = await axios.post('http://localhost:3004/user/logout', null, config);
             console.log(res);
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
             dispatch(authSlice.actions.logout());
-            router.push("/");
+            router.push('/');
         } catch (error) {
             console.error(error);
         }
@@ -83,48 +95,52 @@ const UserAvatar = () => {
     //#endregion
     return (
         <>
-            <Tooltip title="Account settings">
-                <IconButton onClick={handleClick}>
-                    {user.avatar ? (
-                        <Avatar alt="Remy Sharp">
-                            <Image loader={({ src }) => src} src={user.avatar} height={40} width={40} alt={user.name} priority />
-                        </Avatar>
-                    ) : (
-                        <Avatar {...stringAvatar("Antonio Gonzalez")} />
-                    )}
-                </IconButton>
-            </Tooltip>
+            {isStringAvatar ? (
+                <Tooltip title="Account settings">
+                    <IconButton onClick={handleClick}>
+                        {user.avatar ? (
+                            <Avatar alt="Remy Sharp">
+                                <Image loader={({ src }) => src} src={user.avatar} height={40} width={40} alt={user.name} priority />
+                            </Avatar>
+                        ) : (
+                            <Avatar {...stringAvatar(user.name+ ' '+ user.lastName)} />
+                        )}
+                    </IconButton>
+                </Tooltip>
+            ) : (
+                <Avatar {...stringAvatarEdited(user.name+ ' '+ user.lastName)} />
+            )}
 
-                <Menu
-                    anchorEl={anchorEl}
-                    id="account-menu"
-                    open={open}
-                    onClose={handleClose}
-                    onClick={handleClose}
-                    PaperProps={{
-                        elevation: 0,
-                    }}
-                    transformOrigin={{ horizontal: "right", vertical: "top" }}
-                    anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-                >
-                    <MenuItem onClick={goToProfile}>My account</MenuItem>
-                    <Divider />
-                    <MenuItem onClick={goToSettings}>
-                        <ListItemIcon>
-                            <Settings fontSize="small" />
-                        </ListItemIcon>
-                        Settings
-                    </MenuItem>
-                    <MenuItem onClick={logout}>
-                        <ListItemIcon>
-                            <Logout fontSize="small" />
-                        </ListItemIcon>
-                        Logout
-                    </MenuItem>
-                </Menu>
+            <Menu
+                anchorEl={anchorEl}
+                id="account-menu"
+                open={open}
+                onClose={handleClose}
+                onClick={handleClose}
+                PaperProps={{
+                    elevation: 0,
+                }}
+                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+            >
+                <MenuItem onClick={goToProfile}>My account</MenuItem>
+                <Divider />
+                <MenuItem onClick={goToSettings}>
+                    <ListItemIcon>
+                        <Settings fontSize="small" />
+                    </ListItemIcon>
+                    Settings
+                </MenuItem>
+                <MenuItem onClick={logout}>
+                    <ListItemIcon>
+                        <Logout fontSize="small" />
+                    </ListItemIcon>
+                    Logout
+                </MenuItem>
+            </Menu>
         </>
     );
 };
 
-UserAvatar.displayName = "UserAvatar";
+UserAvatar.displayName = 'UserAvatar';
 export default UserAvatar;

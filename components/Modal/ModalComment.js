@@ -25,6 +25,7 @@ const ModalComment = ({ show, handleClose }) => {
         e.preventDefault();
         console.log({post});
         const res = await createPost(post, token);
+        console.log({res});
         if (res) router.push("/"+actualUser.nickname);
         handleClose();
         setImage("");

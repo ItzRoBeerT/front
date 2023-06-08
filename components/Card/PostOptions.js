@@ -1,13 +1,13 @@
-import axios from "axios";
-import { Box, Button, ButtonGroup } from "@mui/material";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useRouter } from "next/router";
+import axios from 'axios';
+import { Box, Button, ButtonGroup, Typography } from '@mui/material';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 
-const PostOptions =({ post, usersPost }) => {
+const PostOptions = ({ post, usersPost }) => {
     //#region VARIABLES
     const user = useSelector((state) => state.auth.user);
     const [isUserLikedPost, setIsUserLikedPost] = useState(false);
@@ -22,7 +22,7 @@ const PostOptions =({ post, usersPost }) => {
 
     //#region FUNCTIONS
     useEffect(() => {
-        checkIfUserLikedPost(); 
+        checkIfUserLikedPost();
     }, []);
 
     const checkIfUserLikedPost = () => {
@@ -30,11 +30,11 @@ const PostOptions =({ post, usersPost }) => {
             post.likedBy.forEach((like) => {
                 if (like.userId === user._id) setIsUserLikedPost(true);
             });
-        }else{
+        } else {
             setIsUserLikedPost(false);
         }
     };
- 
+
     const likePost = async () => {
         if (isUserLikedPost) {
             try {
@@ -56,24 +56,43 @@ const PostOptions =({ post, usersPost }) => {
     };
 
     const commentPost = () => {
-        router.push({ pathname: `/post/${post._id}`});
+        router.push({ pathname: `/post/${post._id}` });
     };
     //#endregion
 
     return (
         <Box
             sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                "& > *": {
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& > *': {
                     m: 1,
                 },
             }}
         >
             <ButtonGroup variant="text" aria-label="text button group">
-                <Button onClick={likePost}>{!isUserLikedPost ? <FavoriteBorderIcon sx={{ color: "red" }} /> : <FavoriteIcon sx={{ color: "red" }} />}</Button>
+                <Button onClick={likePost}>
+                    {!isUserLikedPost ? (
+                        <>
+                            <Typography variant="caption" component="div" sx={{ color: 'red',  float: 'left' }}>
+                                {post.likedBy.length}
+                            </Typography>
+                            <FavoriteBorderIcon sx={{ color: 'red' }} />
+                        </>
+                    ) : (
+                        <>
+                            <Typography variant="caption" component="div" sx={{ color: 'red', float: 'left' }}>
+                                {post.likedBy.length}
+                            </Typography>
+                            <FavoriteIcon sx={{ color: 'red' }} />
+                        </>
+                    )}
+                </Button>
                 <Button onClick={commentPost}>
+                    <Typography variant="caption" component="div" sx={{ color: 'blue', float: 'left' }}>
+                        {post.comments.length}
+                    </Typography>
                     <ChatBubbleOutlineIcon />
                 </Button>
             </ButtonGroup>
@@ -81,5 +100,5 @@ const PostOptions =({ post, usersPost }) => {
     );
 };
 
-PostOptions.displayName = "PostOptions";
+PostOptions.displayName = 'PostOptions';
 export default PostOptions;
