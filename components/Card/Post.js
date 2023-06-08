@@ -1,5 +1,5 @@
 import moment from "moment/moment";
-import { Card, CardContent, CardHeader, CardMedia, IconButton, Menu, MenuItem, Typography } from "@mui/material";
+import { Card, CardContent, CardHeader, CardMedia, IconButton, Menu, MenuItem, Skeleton, Typography } from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -64,7 +64,20 @@ const Post = ({ post, onDeletePost }) => {
                     <PostOptions post={post} usersPost={user} />
                 </Card>
             ) : (
-                <div>Loading...</div>
+                <Card >
+                    <CardHeader>
+                        <Skeleton variant="circular" width={40} height={40} />
+                    </CardHeader>
+                    <CardContent>
+                        <Typography variant="body2" color="text.secondary">
+                            <Skeleton variant="text" />
+                            <Skeleton variant="text" />
+                            <Skeleton variant="text" />
+                        </Typography>
+                    </CardContent>
+                    <CardMedia component="img" alt="Nicola Sturgeon on a TED talk stage" height="200" image="https://pi.tedcdn.com/r/talkstar-photos.s3.amazonaws.com/uploads/72bda89f-9bbf-4685-910a-2f151c4f3a8a/NicolaSturgeon_2019T-embed.jpg?w=512" />
+                </Card>
+
             )}
 
             <Menu

@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 
 function Home({ posts }) {
     const [postsState, setPostsState] = useState(posts);
+    let postsAux =  [];
     const [loading, setLoading] = useState(false);
     const [value, setValue] = useState(0);
     const [page, setPage] = useState(1);
@@ -14,33 +15,38 @@ function Home({ posts }) {
 
     //#region FUNCTIONS
     useEffect(() => {
-        // if (value === 0) {
-        //     if (page > 1) getMorePosts();
-        // }
-
-        let options = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 1.0,
-        };
-
-        const observer = new IntersectionObserver(([entry]) => {
-            console.log({ entry });
-            if (entry.isIntersecting) {
+        if (padreRef.current === null) return;
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                console.log('Intersecting');
                 setLoading(true);
                 getMorePosts();
+                observer.unobserve(padreRef.current);
             }
-        }, options);
-
+        });
         observer.observe(padreRef.current);
-    }, [padreRef.current]);
+    }, [padreRef.current, page]);
 
     const getMorePosts = async () => {
-        const newPosts = await getRecentPosts(page);
+        const newPosts = await getRecentPosts(page + 1);
+        const areEquals = JSON.stringify(postsAux) === JSON.stringify(newPosts);
+
+        if(!areEquals) postsAux = newPosts;
+        else return;
+
+        console.log({ newPosts, page });
+        // Filtrar los nuevos posts para evitar duplicados
+        const filteredPosts = newPosts.filter((newPost) => {
+            return !postsState.find((existingPost) => existingPost._id === newPost._id);
+        });
+
+        console.log({ newPosts, filteredPosts });
         setPostsState((prev) => [...prev, ...newPosts]);
-        setPage((prev) => prev + 1);
         setLoading(false);
+        setPage((prev) => prev + 1);
     };
+
+    console.log({ postsState });
 
     const getFeaturedPosts = async () => {
         const posts = await getPopularPosts();
@@ -60,9 +66,6 @@ function Home({ posts }) {
             getFeaturedPosts();
         }
     };
-
-    console.log({ postsState });
-
     const handleDeletePost = async (postDeleted) => {
         const newPosts = postsState.filter((post) => post._id !== postDeleted._id);
         setPostsState(newPosts);
@@ -77,10 +80,12 @@ function Home({ posts }) {
                 ))}
                 {loading && <h1>Cargando...</h1>}
             </Container>
-            <div ref={padreRef}>
-                <hr />
-            </div>
-            <Button >FFSFS</Button>
+            {
+                <div ref={padreRef}>
+                    <hr />
+                    <Button>FFSFS</Button>
+                </div>
+            }
         </>
     );
 }
