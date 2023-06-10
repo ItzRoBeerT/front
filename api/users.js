@@ -93,3 +93,24 @@ export const updateUserInfo = async (user, token) => {
         return null;
     }
 }
+
+export const logoutUser = async (token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+    try {
+        const res = await axios.post(`${BASE_URL}/user/logout`, {}, config);
+        if (res.status === 200) {
+            const user = res.data;
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            return user;
+        }
+      
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}

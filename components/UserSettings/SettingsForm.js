@@ -2,15 +2,17 @@ import { Avatar, Button, FormControl, FormLabel, IconButton, Input, TextField } 
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 import Image from 'next/image';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Resizer from 'react-image-file-resizer';
 import { updateUserInfo } from '@/api/users';
 import CSS from './SettingsForm.module.scss';
+import authSlice from '@/store/auth-slice';
 import UserAvatar from '../shared/headers/headerTools/UserAvatar';
 
 const SettingsForm = ({ user }) => {
     const [updates, setUpdates] = useState({});
     const [avatar, setAvatar] = useState(null);
+    const dispatch = useDispatch();
     const token = useSelector((state) => state.auth.userToken);
 
     //#region FUNCTIONS
@@ -19,8 +21,10 @@ const SettingsForm = ({ user }) => {
         if (updates === {}) return;
 
         console.log({ updates });
-        const res = updateUserInfo(updates, token);
-        console.log({ res });
+        const res = await updateUserInfo(updates, token);
+        if (res) {
+            dispatch(authSlice.actions.updateUser(res));
+        }
     };
 
     const handleChange = (e) => {

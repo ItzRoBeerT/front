@@ -72,7 +72,7 @@ const ModalLogin = ({ show, handleClose }) => {
                             </InputLabel>
                             <Input id="password" type="password" className={CSS.input} onChange={handleChange} />
                         </FormControl>
-                        <Button type="submit" variant="contained" className={CSS.btn}>
+                        <Button type="submit" variant="contained" className={CSS.btn} onClick={handleClose}>
                             Iniciar sesion
                         </Button>
                         <small>
