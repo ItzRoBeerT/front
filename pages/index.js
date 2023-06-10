@@ -1,49 +1,59 @@
 import { Button, Container } from '@mui/material';
-import { getPopularPosts, getRecentPosts, obtenerTodosPosts } from '@/api/posts';
+import { getPopularPosts, getRecentPosts } from '@/api/posts';
+import { useEffect, useRef, useState } from 'react';
 import Post from '@/components/Card/Post';
 import CSS from '@/styles/Home.module.scss';
 import MiniHeader from '@/components/shared/headers/MiniHeader';
-import { useEffect, useRef, useState } from 'react';
+import { includeArray } from '@/functions/methods';
+
+let loading = false;
 
 function Home({ posts }) {
     const [postsState, setPostsState] = useState(posts);
-    let postsAux =  [];
-    const [loading, setLoading] = useState(false);
     const [value, setValue] = useState(0);
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(2);
     const padreRef = useRef(null);
 
     //#region FUNCTIONS
     useEffect(() => {
-        if (padreRef.current === null) return;
-        const observer = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) {
-                console.log('Intersecting');
-                setLoading(true);
-                getMorePosts();
-                observer.unobserve(padreRef.current);
-            }
-        });
+        if (padreRef.current === null ) return;
+
+        const observer = new IntersectionObserver(callback);
         observer.observe(padreRef.current);
-    }, [padreRef.current, page]);
+
+        return () => observer.disconnect();
+    }, []);
+
+    useEffect(() => {
+        console.log({ useffectPage: page, loading });
+        if (!loading) {
+            loading = true;
+            getMorePosts();
+        }
+    }, [page]);
+
+    const callback = (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting) {
+            console.log({ intersectionPage: page });
+            setPage((prev) => prev + 1);
+        }
+    };
 
     const getMorePosts = async () => {
-        const newPosts = await getRecentPosts(page + 1);
-        const areEquals = JSON.stringify(postsAux) === JSON.stringify(newPosts);
+        const newPosts = await getRecentPosts(page);
 
-        if(!areEquals) postsAux = newPosts;
-        else return;
+        const currentIds = postsState.map((post) => post._id);
+        const newIds = newPosts.map((post) => post._id);
 
-        console.log({ newPosts, page });
-        // Filtrar los nuevos posts para evitar duplicados
-        const filteredPosts = newPosts.filter((newPost) => {
-            return !postsState.find((existingPost) => existingPost._id === newPost._id);
-        });
+        const includes = includeArray(currentIds, newIds);
 
-        console.log({ newPosts, filteredPosts });
+        if (includes) return;
+
+        console.log({ newPosts, postsState, includes, page });
+
         setPostsState((prev) => [...prev, ...newPosts]);
-        setLoading(false);
-        setPage((prev) => prev + 1);
+        loading = false;
     };
 
     const getFeaturedPosts = async () => {
@@ -68,6 +78,7 @@ function Home({ posts }) {
         const newPosts = postsState.filter((post) => post._id !== postDeleted._id);
         setPostsState(newPosts);
     };
+
     //#endregion
     return (
         <>
@@ -76,14 +87,11 @@ function Home({ posts }) {
                 {postsState.map((post, index) => (
                     <Post key={post._id} post={post} onDeletePost={handleDeletePost} />
                 ))}
-                {loading && <h1>Cargando...</h1>}
             </Container>
-            {
-                <div ref={padreRef}>
-                    <hr />
-                    <Button>FFSFS</Button>
-                </div>
-            }
+            <div ref={padreRef}>
+                <hr />
+                <Button>FFSFS</Button>
+            </div>
         </>
     );
 }
