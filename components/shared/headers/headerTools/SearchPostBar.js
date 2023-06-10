@@ -3,8 +3,8 @@ import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react';
 import { IconButton } from '@mui/material';
-import { searchPosts } from '@/api/posts';
 import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 
 //#region  COMPONENTS
 const Search = styled('div')(({ theme }) => ({
@@ -42,6 +42,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const SearchPostBar = () => {
     const [search, setSearch] = useState('');
+    const router = useRouter();
     const token = useSelector((state) => state.auth.token);
 
     //#region  FUNCTIONS
@@ -51,15 +52,14 @@ const SearchPostBar = () => {
 
     const handleSearchEnter = async (e) => {
         if (e.key === 'Enter' && search !== '') {
-            const res = await searchPosts(search, token);
-            console.log(res);
+            router.push({pathname: '/search', query: {key: search}});
         }
     };
 
     const handleSearchClick = async (e) => {
         if (search !== ''){
-            const res = await searchPosts(search, token);
-            console.log(res);
+            router.push({pathname: '/search', query: {key: search}});
+
         } 
     };
 

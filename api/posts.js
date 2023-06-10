@@ -144,15 +144,9 @@ export const deletePost = async (postId, token) => {
     }
 };
 
-export const searchPosts = async (searcText, token) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
-
+export const searchPosts = async (searcText) => {
     try {
-        const res = await axios.get(BASE_URL + `post/search/${searcText}`, config);
+        const res = await axios.get(BASE_URL + `post/search/${searcText}`);
         if (res.status === 200) {
             return res.data;
         }

@@ -16,8 +16,7 @@ const Post = ({ post, onDeletePost }) => {
     const open = Boolean(anchorEl);
     const actualUser = useSelector((state) => state.auth.user);
     const token = useSelector((state) => state.auth.userToken);
-    const postRef = useRef(null);
-
+    
     //#region FUNCTIONS
     useEffect(() => {
         const getUser = async () => {
@@ -29,6 +28,21 @@ const Post = ({ post, onDeletePost }) => {
         
         getUser();
     }, [actualUser]);
+
+    const highlightHashtags = (content) => {
+        const hashtagRegex = /#\w+/g;
+        const parts = content.split(hashtagRegex);
+        const matches = content.match(hashtagRegex);
+      
+        return parts.map((part, index) => (
+            <React.Fragment key={index}>
+                {part}
+                {matches && matches[index] && (
+                    <span className={CSS.hashtag}>{matches[index]}</span>
+                )}
+            </React.Fragment>
+        ));
+    };
 
     const openMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -57,7 +71,7 @@ const Post = ({ post, onDeletePost }) => {
                         subheader={moment(post.date).format("LL")} />
                     <CardContent>
                         <Typography variant="body2" color="text.secondary">
-                            {post.content}
+                        {highlightHashtags(post.content)}
                         </Typography>
                     </CardContent>
                     {post.image && <CardMedia component="img" alt="prueba" height="200" image={post.image} />}

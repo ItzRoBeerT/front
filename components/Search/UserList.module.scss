@@ -1,0 +1,17 @@
+
+.mainList{
+    width: 100%;
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+}
+
+.subheader{
+    background-color: #063970;
+    color: white;
+    .title{
+        color: white;
+        padding: 4px;
+        text-align: center;
+    }
+}
