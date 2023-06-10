@@ -1,11 +1,12 @@
 import { Backdrop, Fade, FormControl, InputLabel, Modal, Input, Button, IconButton } from '@mui/material';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import Resizer from 'react-image-file-resizer';
 import CSS from './ModalComment.module.scss';
 import { createPost } from '@/api/posts';
-import { useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
 
 const ModalComment = ({ show, handleClose }) => {
 
@@ -41,25 +42,36 @@ const ModalComment = ({ show, handleClose }) => {
         });
     };
 
-    const onFileChange = (e) => {
+    const onFileChange = async (e) => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0];
             if (file.type.includes("image")) {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = function load() {
-                   setPost({
+                try {
+                    const resizedImage = await resizeFile(file); // Llama a la función resizeFile
+                    setPost({
                         ...post,
-                        image: reader.result,
+                        image: resizedImage,
                     });
-                    setImage(reader.result); 
-                };
+                    setImage(resizedImage);
+                } catch (error) {
+                    console.log(error);
+                }
             } else {
                 delete post.image;
                 setImage(null);
             }
         }
     }
+
+    const resizeFile = (file) => new Promise(resolve => {
+        Resizer.imageFileResizer(file, 300, 300, 'JPEG', 100, 0,
+            uri => {
+                resolve(uri);
+            },
+            'base64'
+        );
+    });
+
     //#endregion
 
     return (

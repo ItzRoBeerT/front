@@ -3,6 +3,7 @@ import PermMediaIcon from '@mui/icons-material/PermMedia';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import Resizer from 'react-image-file-resizer';
 import { updateUserInfo } from '@/api/users';
 import CSS from './SettingsForm.module.scss';
 import UserAvatar from '../shared/headers/headerTools/UserAvatar';
@@ -17,6 +18,7 @@ const SettingsForm = ({ user }) => {
         e.preventDefault();
         if (updates === {}) return;
 
+        console.log({ updates });
         const res = updateUserInfo(updates, token);
         console.log({ res });
     };
@@ -28,25 +30,35 @@ const SettingsForm = ({ user }) => {
         });
     };
 
-    const onFileChange = (e) => {
+    const onFileChange = async (e) => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0];
             if (file.type.includes('image')) {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = function load() {
+                try {
+                    const resizedImage = await resizeFile(file); // Llama a la función resizeFile
                     setUpdates({
                         ...updates,
-                        avatar: reader.result,
+                        avatar: resizedImage,
                     });
-                    setAvatar(reader.result);
-                };
+                    setAvatar(resizedImage);
+                } catch (error) {
+                    console.log(error);
+                }
             } else {
                 delete updates.avatar;
                 setAvatar(null);
             }
         }
     };
+
+    const resizeFile = (file) => new Promise(resolve => {
+        Resizer.imageFileResizer(file, 300, 300, 'JPEG', 100, 0,
+            uri => {
+                resolve(uri);
+            },
+            'base64'
+        );
+    });
 
     //#endregion
 

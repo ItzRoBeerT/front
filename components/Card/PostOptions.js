@@ -6,11 +6,13 @@ import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
+import Resizer from "react-image-file-resizer";
 
 const PostOptions = ({ post, usersPost }) => {
     //#region VARIABLES
     const user = useSelector((state) => state.auth.user);
     const [isUserLikedPost, setIsUserLikedPost] = useState(false);
+    const [likes, setLikes] = useState(post.likedBy.length);
     const token = useSelector((state) => state.auth.userToken);
     const router = useRouter();
     const config = {
@@ -39,7 +41,7 @@ const PostOptions = ({ post, usersPost }) => {
         if (isUserLikedPost) {
             try {
                 const res = await axios.post(`http://localhost:3004/post/unlike/${post._id}`, null, config);
-                console.log(res);
+                setLikes(likes - 1);
                 setIsUserLikedPost(false);
             } catch (error) {
                 console.log(error);
@@ -48,12 +50,15 @@ const PostOptions = ({ post, usersPost }) => {
         }
         try {
             const res = await axios.post(`http://localhost:3004/post/like/${post._id}`, null, config);
-            console.log(res);
+            setLikes(likes + 1);
             setIsUserLikedPost(true);
         } catch (error) {
             console.log(error);
         }
     };
+
+
+    
 
     const commentPost = () => {
         router.push({ pathname: `/post/${post._id}` });
@@ -76,14 +81,14 @@ const PostOptions = ({ post, usersPost }) => {
                     {!isUserLikedPost ? (
                         <>
                             <Typography variant="caption" component="div" sx={{ color: 'red',  float: 'left' }}>
-                                {post.likedBy.length}
+                                {likes}
                             </Typography>
                             <FavoriteBorderIcon sx={{ color: 'red' }} />
                         </>
                     ) : (
                         <>
                             <Typography variant="caption" component="div" sx={{ color: 'red', float: 'left' }}>
-                                {post.likedBy.length}
+                                {likes}
                             </Typography>
                             <FavoriteIcon sx={{ color: 'red' }} />
                         </>

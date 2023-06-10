@@ -1,6 +1,7 @@
 import { Button, Divider, FormControl, FormLabel, Input, TextField } from '@mui/material';
 import Image from 'next/image';
 import { useState } from 'react';
+import Resizer from 'react-image-file-resizer';
 import { createNewUser } from '@/api/users';
 import CSS from './FormRegister.module.scss';
 
@@ -19,21 +20,21 @@ const FormRegister = () => {
     //#endregion
 
     //#region FUNCTIONS
-    const onFileChange = (e) => {
+    const onFileChange = async (e) => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0];
 
             if (file.type.includes('image')) {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = function load() {
+                try {
+                    const resizedImage = await resizeFile(file);
                     setUser({
                         ...user,
-                        avatar: reader.result,
+                        avatar: resizedImage,
                     });
-                    setImage(reader.result);
-                    setError(false);
-                };
+                    setImage(resizedImage);
+                } catch (error) {
+                    console.log(error);
+                }
             } else {
                 console.log('it is not an image');
                 delete user.avatar;
@@ -42,6 +43,15 @@ const FormRegister = () => {
             }
         }
     };
+
+    const resizeFile = (file) => new Promise(resolve => {
+        Resizer.imageFileResizer(file, 300, 300, 'JPEG', 100, 0,
+            uri => {
+                resolve(uri);
+            },
+            'base64'
+        );
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -80,6 +90,9 @@ const FormRegister = () => {
                     type="text"
                     id="lastName"
                     onChange={handleChange}
+                    inputProps={{
+                        className: CSS.inputCustom,
+                    }}
                     InputLabelProps={{
                         className: CSS.inputLabel,
                     }}
@@ -91,6 +104,9 @@ const FormRegister = () => {
                     type="number"
                     id="age"
                     onChange={handleChange}
+                    inputProps={{
+                        className: CSS.inputCustom,
+                    }}
                     InputLabelProps={{
                         className: CSS.inputLabel,
                     }}
@@ -105,6 +121,9 @@ const FormRegister = () => {
                     type="text"
                     id="email"
                     onChange={handleChange}
+                    inputProps={{
+                        className: CSS.inputCustom,
+                    }}
                     InputLabelProps={{
                         className: CSS.inputLabel,
                     }}
@@ -116,6 +135,9 @@ const FormRegister = () => {
                     type="password"
                     id="password"
                     onChange={handleChange}
+                    inputProps={{
+                        className: CSS.inputCustom,
+                    }}
                     InputLabelProps={{
                         className: CSS.inputLabel,
                     }}
@@ -128,6 +150,9 @@ const FormRegister = () => {
                     type="text"
                     id="nickname"
                     onChange={handleChange}
+                    inputProps={{
+                        className: CSS.inputCustom,
+                    }}
                     InputLabelProps={{
                         className: CSS.inputLabel,
                     }}

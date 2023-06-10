@@ -46,8 +46,6 @@ function Home({ posts }) {
         setPage((prev) => prev + 1);
     };
 
-    console.log({ postsState });
-
     const getFeaturedPosts = async () => {
         const posts = await getPopularPosts();
         setPostsState(posts);

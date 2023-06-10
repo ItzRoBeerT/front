@@ -84,6 +84,7 @@ export const updateUserInfo = async (user, token) => {
         },
     };
     try {
+        console.log({user});
         const res = await axios.patch(`${BASE_URL}/user/update`, user, config);
         const updatedUser = res.data;
         return updatedUser;
