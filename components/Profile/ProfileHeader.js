@@ -56,14 +56,14 @@ const ProfileHeader = ({ user, posts, friends, onDeletePost }) => {
             <div className="avatar y editar o seguir">
                 <CustomAvatar user={user} />
                 {actualUser?._id === user._id ? (
-                    <Button variant="outlined" onClick={goToSettings}>Editar perfil</Button>
+                    <Button variant="outlined" onClick={goToSettings}>Edit profile</Button>
                 ) : !isFollowing ? (
                     <Button variant="outlined" onClick={addFriendHandler}>
-                        Seguir
+                        Follow
                     </Button>
                 ) : (
                     <Button variant="outlined" onClick={deleteFriendHandler}>
-                        Dejar de seguir
+                        Unfollow
                     </Button>
                 )}
             </div>
@@ -79,7 +79,7 @@ const ProfileHeader = ({ user, posts, friends, onDeletePost }) => {
                 </div>
             )}
             <div className="seguidores ">
-                <Typography className={CSS.text}>siguiendo a {user.friends.length} personas </Typography>
+                <Typography className={CSS.text}>Following {user.friends.length} users ! </Typography>
             </div>
             <Divider className={CSS.divider} />
             <div className={CSS.tabsContent}>

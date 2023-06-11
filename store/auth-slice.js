@@ -9,6 +9,7 @@ const authSlice = createSlice({
         userToken,
         user,
         loading: false,
+        isSubmitedPost: false,
     },
     reducers: {
         logout: (state) => {
@@ -32,6 +33,12 @@ const authSlice = createSlice({
             state.user = payload;
             state.loading = false;
             console.log({payload});
+        },
+        submitPost: (state) => {
+            state.isSubmitedPost = true;
+        },
+        resetSubmitPost: (state) => {
+            state.isSubmitedPost = false;
         }
     },
 });

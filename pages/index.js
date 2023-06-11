@@ -1,11 +1,11 @@
 import { Button, Container } from '@mui/material';
+import Image from 'next/image';
 import { getPopularPosts, getRecentPosts } from '@/api/posts';
 import { useEffect, useRef, useState } from 'react';
 import Post from '@/components/Card/Post';
 import CSS from '@/styles/Home.module.scss';
 import MiniHeader from '@/components/shared/headers/MiniHeader';
 import { includeArray } from '@/functions/methods';
-
 let loading = false;
 
 function Home({ posts }) {
@@ -25,8 +25,7 @@ function Home({ posts }) {
     }, []);
 
     useEffect(() => {
-        console.log({ useffectPage: page, loading });
-        if (!loading) {
+        if (!loading && value === 0) {
             loading = true;
             getMorePosts();
         }
@@ -35,7 +34,6 @@ function Home({ posts }) {
     const callback = (entries) => {
         const [entry] = entries;
         if (entry.isIntersecting) {
-            console.log({ intersectionPage: page });
             setPage((prev) => prev + 1);
         }
     };
@@ -50,8 +48,6 @@ function Home({ posts }) {
 
         if (includes) return;
 
-        console.log({ newPosts, postsState, includes, page });
-
         setPostsState((prev) => [...prev, ...newPosts]);
         loading = false;
     };
@@ -63,6 +59,7 @@ function Home({ posts }) {
 
     const getInitialPosts = async () => {
         const newPosts = await getRecentPosts(1);
+        setPage(2);
         setPostsState(newPosts);
     };
 
@@ -88,9 +85,8 @@ function Home({ posts }) {
                     <Post key={post._id} post={post} onDeletePost={handleDeletePost} />
                 ))}
             </Container>
-            <div ref={padreRef}>
-                <hr />
-                <Button>FFSFS</Button>
+            <div ref={padreRef} className={CSS.gifContainer}>
+                <Image src='/gifs/rolling1.gif' alt="loading" width={100} height={100} />
             </div>
         </>
     );

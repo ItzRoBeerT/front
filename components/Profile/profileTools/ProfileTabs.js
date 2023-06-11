@@ -15,7 +15,7 @@ const ProfileTabs = ({onHandleTabs}) =>{
     return(
         <Tabs value={value} onChange={handleChange} className={CSS.container}>
             <Tab className={CSS.tab} label='Posts' />
-            <Tab className={CSS.tab} label='Siguiendo' />
+            <Tab className={CSS.tab} label='Following' />
         </Tabs>
     )
 

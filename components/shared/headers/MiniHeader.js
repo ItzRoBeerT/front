@@ -1,7 +1,7 @@
 import {Tab, Tabs, Toolbar } from "@mui/material";
 import { memo, useState } from "react";
 
-const PAGES = ["Recents", "features"];
+const PAGES = ["Recents", "Most Popular"];
 const MiniHeader = ({onSendValue}) => {
     const [value, setValue] = useState(0);
 

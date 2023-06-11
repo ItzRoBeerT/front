@@ -12,3 +12,22 @@
     display: flex;
     flex-direction: column;
 }
+
+.textArea{
+    font-family: IBM Plex Sans, sans-serif;
+    font-size: 17px;
+    padding: 4px;
+    height: 100px !important;
+    width: 475px !important;
+}
+.imageContent{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.image{
+    border-radius: 10px;
+}

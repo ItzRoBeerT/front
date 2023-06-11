@@ -1,12 +1,24 @@
-import { useState } from "react";
-import { Container } from "@mui/material";
-import { getFriendsUserById, getUserByNickname } from "@/api/users";
-import { getPostsByNickname } from "@/api/posts";
-import ProfileHeader from "@/components/Profile/ProfileHeader";
+import { useEffect, useState } from 'react';
+import { Container } from '@mui/material';
+import { getFriendsUserById, getUserByNickname } from '@/api/users';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPostsByNickname } from '@/api/posts';
+import authSlice from '@/store/auth-slice';
+import ProfileHeader from '@/components/Profile/ProfileHeader';
 
-const UserProfile = ({user, posts,friends}) => {
-
+const UserProfile = ({ user, posts, friends }) => {
     const [postsState, setPosts] = useState(posts);
+    const isSubmitedPost = useSelector((state) => state.auth.isSubmitedPost);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (isSubmitedPost === false) return;
+        getPostsByNickname(user.nickname).then((res) => {
+            setPosts(res);
+        });
+
+        dispatch(authSlice.actions.resetSubmitPost());
+    }, [isSubmitedPost]);
 
     const handleDeletePost = async (postDeleted) => {
         const newPosts = posts.filter((post) => post._id !== postDeleted._id);
@@ -15,7 +27,7 @@ const UserProfile = ({user, posts,friends}) => {
 
     return (
         <Container>
-            <ProfileHeader user={user} posts={postsState} friends={friends} onDeletePost={handleDeletePost}/>
+            <ProfileHeader user={user} posts={postsState} friends={friends} onDeletePost={handleDeletePost} />
         </Container>
     );
 };
@@ -25,7 +37,7 @@ export async function getServerSideProps(context) {
     const user = await getUserByNickname(nickname);
     const posts = await getPostsByNickname(nickname);
     const friends = await getFriendsUserById(user._id);
- 
+
     return {
         props: {
             user,
@@ -35,5 +47,5 @@ export async function getServerSideProps(context) {
     };
 }
 
-UserProfile.displayName = "UserProfile";
+UserProfile.displayName = 'UserProfile';
 export default UserProfile;

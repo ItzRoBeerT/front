@@ -1,22 +1,24 @@
-import { Backdrop, Fade, FormControl, InputLabel, Modal, Input, Button, IconButton } from '@mui/material';
+import { Backdrop, Fade, FormControl, InputLabel, Modal, Input, Button, IconButton, TextareaAutosize } from '@mui/material';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Resizer from 'react-image-file-resizer';
+import authSlice from '@/store/auth-slice';
 import CSS from './ModalComment.module.scss';
 import { createPost } from '@/api/posts';
 
 const ModalComment = ({ show, handleClose }) => {
-
     //#region VARIABLES
-    const [image, setImage] = useState("");
+    const [image, setImage] = useState('');
     const [post, setPost] = useState({
-        content: "",
+        content: '',
     });
+    const [characterCount, setCharacterCount] = useState(post.content.length);
     const actualUser = useSelector((state) => state.auth.user);
     const token = useSelector((state) => state.auth.userToken);
+    const dispatch = useDispatch();
     const router = useRouter();
     //#endregion
 
@@ -24,15 +26,19 @@ const ModalComment = ({ show, handleClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log({post});
+        console.log({ post });
         const res = await createPost(post, token);
-        console.log({res});
-        if (res) router.push("/"+actualUser.nickname);
+        console.log({ res });
+        if (res) {
+            dispatch(authSlice.actions.submitPost());
+            router.push('/' + actualUser.nickname);
+        }
         handleClose();
-        setImage("");
+        setImage('');
         setPost({
-            content: "",
+            content: '',
         });
+        setCharacterCount(0);
     };
 
     const handleChange = (e) => {
@@ -40,12 +46,13 @@ const ModalComment = ({ show, handleClose }) => {
             ...post,
             [e.target.id]: e.target.value,
         });
+        setCharacterCount(e.target.value.length);
     };
 
     const onFileChange = async (e) => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0];
-            if (file.type.includes("image")) {
+            if (file.type.includes('image')) {
                 try {
                     const resizedImage = await resizeFile(file); // Llama a la función resizeFile
                     setPost({
@@ -61,43 +68,46 @@ const ModalComment = ({ show, handleClose }) => {
                 setImage(null);
             }
         }
-    }
+    };
 
-    const resizeFile = (file) => new Promise(resolve => {
-        Resizer.imageFileResizer(file, 300, 300, 'JPEG', 100, 0,
-            uri => {
-                resolve(uri);
-            },
-            'base64'
-        );
-    });
+    const resizeFile = (file) =>
+        new Promise((resolve) => {
+            Resizer.imageFileResizer(
+                file,
+                300,
+                300,
+                'JPEG',
+                100,
+                0,
+                (uri) => {
+                    resolve(uri);
+                },
+                'base64'
+            );
+        });
 
     //#endregion
 
     return (
-        <Modal 
-            aria-labelledby="transition-modal-title" 
-            aria-describedby="transition-modal-description" 
-            open={show} 
-            onClose={handleClose} 
-            closeAfterTransition 
-            slots={{ backdrop: Backdrop }}
-        >
+        <Modal aria-labelledby="transition-modal-title" aria-describedby="transition-modal-description" open={show} onClose={handleClose} closeAfterTransition slots={{ backdrop: Backdrop }}>
             <Fade in={show} className={CSS.modal}>
-                <form method='post' onSubmit={handleSubmit}>
+                <form method="post" onSubmit={handleSubmit}>
                     <FormControl>
-                        <InputLabel htmlFor="content">Contenido</InputLabel>
-                        <Input id="content" type="text" onChange={handleChange}/>
+                        <TextareaAutosize className={CSS.textArea} id="content" type="text" maxRows={5} maxLength={200} minRows={3} onChange={handleChange} placeholder="What are you thinkin ?" />
+                        <span>{characterCount}/200</span>
                     </FormControl>
-                    <br />
-                    {image && <Image src={image} width={200} height={200} alt={image} />}
-                    <br />
-                    <IconButton component='label'>                        
-                         <input type='file' hidden onChange={onFileChange}/>
-                        <PermMediaIcon color='primary'/>
-                    </IconButton>
 
-                    <Button type="submit" variant="contained" color="primary">Comentar</Button>
+                    <div className={CSS.imageContent}>
+                        {image && <Image src={image} width={200} height={200} alt={image} className={CSS.image} />}
+
+                        <IconButton component="label">
+                            <input type="file" hidden onChange={onFileChange} />
+                            <PermMediaIcon color="primary" />
+                        </IconButton>
+                    </div>
+                    <Button type="submit" variant="contained" color="primary">
+                        Comentar
+                    </Button>
                 </form>
             </Fade>
         </Modal>
