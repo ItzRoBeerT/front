@@ -155,10 +155,10 @@ export const searchPosts = async (searcText) => {
     }
 };
 
-export const getPopularPosts = async () => {
+export const getPopularPosts = async (page) => {
     let posts = null;
     try {
-       const res = await axios.get(BASE_URL + 'post/popular');
+       const res = await axios.get(BASE_URL + 'post/popular/'+page);
          if (res.status === 200) {
             posts = res.data;
         }

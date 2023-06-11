@@ -1,11 +1,12 @@
 import { Button, Container } from '@mui/material';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { getPopularPosts, getRecentPosts } from '@/api/posts';
 import { useEffect, useRef, useState } from 'react';
-import Post from '@/components/Card/Post';
 import CSS from '@/styles/Home.module.scss';
 import MiniHeader from '@/components/shared/headers/MiniHeader';
 import { includeArray } from '@/functions/methods';
+const Post = dynamic(() => import('@/components/Card/Post'));
 let loading = false;
 
 function Home({ posts }) {
@@ -28,6 +29,9 @@ function Home({ posts }) {
         if (!loading && value === 0) {
             loading = true;
             getMorePosts();
+        }else if(!loading && value === 1){
+            loading = true;
+            getMoreFeaturedPosts();
         }
     }, [page]);
 
@@ -52,15 +56,33 @@ function Home({ posts }) {
         loading = false;
     };
 
+    const getMoreFeaturedPosts = async () => {
+
+        const newPosts = await getPopularPosts(page);
+
+        const currentIds = postsState.map((post) => post._id);
+        const newIds = newPosts.map((post) => post._id);
+
+        const includes = includeArray(currentIds, newIds);
+
+        if (includes) return;
+
+        setPostsState((prev) => [...prev, ...newPosts]);
+        loading = false;
+    }
+
     const getFeaturedPosts = async () => {
-        const posts = await getPopularPosts();
+        const posts = await getPopularPosts(1);
+        setPage(2);
         setPostsState(posts);
+        loading = false;
     };
 
     const getInitialPosts = async () => {
         const newPosts = await getRecentPosts(1);
         setPage(2);
         setPostsState(newPosts);
+        loading = false;
     };
 
     const getValue = (value) => {
@@ -75,6 +97,9 @@ function Home({ posts }) {
         const newPosts = postsState.filter((post) => post._id !== postDeleted._id);
         setPostsState(newPosts);
     };
+
+
+    console.log({value, page});
 
     //#endregion
     return (

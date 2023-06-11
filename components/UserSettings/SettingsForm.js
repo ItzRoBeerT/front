@@ -74,6 +74,7 @@ const SettingsForm = ({ user }) => {
                     label="your name"
                     type="text"
                     id="name"
+                    focused
                     defaultValue={user.name}
                     onChange={handleChange}
                     className={CSS.textField}
@@ -85,6 +86,7 @@ const SettingsForm = ({ user }) => {
                     label="your last name"
                     type="text"
                     id="lastName"
+                    focused
                     defaultValue={user.lastName}
                     onChange={handleChange}
                     inputProps={{ className: CSS.inputLastName }}
@@ -94,6 +96,7 @@ const SettingsForm = ({ user }) => {
                 <TextField
                     label="your bio"
                     type="text"
+                    focused
                     id="bio"
                     defaultValue={user.bio}
                     onChange={handleChange}
@@ -107,6 +110,7 @@ const SettingsForm = ({ user }) => {
                     label="your age"
                     type="number"
                     id="age"
+                    focused
                     defaultValue={user.age}
                     onChange={handleChange}
                     inputProps={{ className: CSS.inputAge }}
@@ -117,6 +121,7 @@ const SettingsForm = ({ user }) => {
                     label="your email"
                     type="text"
                     id="email"
+                    focused
                     defaultValue={user.email}
                     onChange={handleChange}
                     inputProps={{ className: CSS.inputEmail }}
@@ -127,6 +132,7 @@ const SettingsForm = ({ user }) => {
                     label="your password"
                     type="password"
                     id="password"
+                    focused
                     defaultValue={user.password}
                     onChange={handleChange}
                     inputProps={{ className: CSS.inputPassword }}
@@ -137,8 +143,8 @@ const SettingsForm = ({ user }) => {
                     label="your nickname"
                     type="text"
                     id="nickname"
+                    focused
                     defaultValue={user.nickname}
-                    className={CSS.test}
                     disabled
                     inputProps={{ className: CSS.inputNickname }}
                     InputLabelProps={{ className: CSS.labelNickname }}
