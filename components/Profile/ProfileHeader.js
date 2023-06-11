@@ -95,7 +95,7 @@ const ProfileHeader = ({ user, posts, friends, onDeletePost }) => {
                 <div className={CSS.listContent}>
                     <List>
                         {friends.map((friend) => (
-                            <Follower friend={friend} />
+                            <Follower key={friend._id} friend={friend} />
                         ))}
                     </List>
                 </div>

@@ -36,7 +36,6 @@ const FormRegister = () => {
                     console.log(error);
                 }
             } else {
-                console.log('it is not an image');
                 delete user.avatar;
                 setImage(null);
                 setError(true);
@@ -55,9 +54,7 @@ const FormRegister = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(user);
         const res = await createNewUser(user);
-        console.log(res);
     };
     const handleChange = (e) => {
         setUser({

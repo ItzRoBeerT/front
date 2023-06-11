@@ -21,7 +21,6 @@ const Reply = ({postId, onAddComents}) =>{
             return;
         }
         const res = await addComment(postId, reply, token);
-        console.log({res});
         onAddComents(res.comments);
         setReply("");
         setError(false);

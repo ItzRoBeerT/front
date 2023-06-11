@@ -28,7 +28,6 @@ const ModalLogin = ({ show, handleClose }) => {
         e.preventDefault();
         try {
             const res = await axios.post("http://localhost:3004/user/login", credentials);
-            console.log(res);
             if (res.data.token) {
                 if (typeof window !== "undefined") {
                     localStorage.setItem("token", res.data.token);

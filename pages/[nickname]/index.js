@@ -9,16 +9,25 @@ import ProfileHeader from '@/components/Profile/ProfileHeader';
 const UserProfile = ({ user, posts, friends }) => {
     const [postsState, setPosts] = useState(posts);
     const isSubmitedPost = useSelector((state) => state.auth.isSubmitedPost);
+    const isChangeUser = useSelector((state) => state.auth.isChangeUser);
+    const updatedUserNickname = useSelector((state) => state.auth.userChangedNickname);
     const dispatch = useDispatch();
 
     useEffect(() => {
+        if (isChangeUser === true) {
+            getPostsByNickname(updatedUserNickname).then((res) => {
+                setPosts(res);
+            });
+            dispatch(authSlice.actions.resetChangeUser());
+        }
+
         if (isSubmitedPost === false) return;
         getPostsByNickname(user.nickname).then((res) => {
             setPosts(res);
         });
 
-        dispatch(authSlice.actions.resetSubmitPost());
-    }, [isSubmitedPost]);
+        dispatch(authSlice.actions.resetChangeUser());
+    }, [isSubmitedPost, isChangeUser]);
 
     const handleDeletePost = async (postDeleted) => {
         const newPosts = posts.filter((post) => post._id !== postDeleted._id);

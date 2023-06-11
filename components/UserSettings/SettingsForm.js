@@ -20,7 +20,6 @@ const SettingsForm = ({ user }) => {
         e.preventDefault();
         if (updates === {}) return;
 
-        console.log({ updates });
         const res = await updateUserInfo(updates, token);
         if (res) {
             dispatch(authSlice.actions.updateUser(res));

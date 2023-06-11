@@ -1,11 +1,17 @@
 import { ListItemAvatar, ListItemButton, ListItemText } from '@mui/material';
 import { useRouter } from 'next/router';
-import CustomAvatar from '@/components/shared/headers/headerTools/CustomAvatar';
 import CSS from './Follower.module.scss';
+import { useDispatch } from 'react-redux';
+import authSlice from '@/store/auth-slice';
+import CustomAvatar from '@/components/shared/headers/headerTools/CustomAvatar';
 
 const Follower = ({ friend }) => {
     const router = useRouter();
+    const dispatch = useDispatch();
+
     const goToProfile = () => {
+        dispatch(authSlice.actions.changeUser());
+        dispatch(authSlice.actions.changeUserNickname(friend.nickname));
         router.push(`/${friend.nickname}`);
     };
 

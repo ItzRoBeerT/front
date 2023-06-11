@@ -26,9 +26,7 @@ const ModalComment = ({ show, handleClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log({ post });
         const res = await createPost(post, token);
-        console.log({ res });
         if (res) {
             dispatch(authSlice.actions.submitPost());
             router.push('/' + actualUser.nickname);
