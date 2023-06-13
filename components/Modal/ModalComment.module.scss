@@ -11,6 +11,10 @@
     padding: 15px 10px;
     display: flex;
     flex-direction: column;
+
+    @media (max-width: 500px) {
+        width: 90%;
+    }
 }
 
 .textArea{
@@ -19,6 +23,10 @@
     padding: 4px;
     height: 100px !important;
     width: 475px !important;
+
+    @media (max-width: 500px) {
+        width: 100% !important;
+    }
 }
 .imageContent{
     display: flex;

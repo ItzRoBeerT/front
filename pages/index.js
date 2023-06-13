@@ -1,20 +1,26 @@
-import { Container } from '@mui/material';
+import { Container, Fab, useMediaQuery } from '@mui/material';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { getPopularPosts, getRecentPosts } from '@/api/posts';
 import { useEffect, useRef, useState } from 'react';
+import SendIcon from '@mui/icons-material/Send';
 import CSS from '@/styles/Home.module.scss';
 import MiniHeader from '@/components/shared/headers/MiniHeader';
 import { includeArray } from '@/utils/functions/methods';
+import theme from '@/config/theme';
+import ModalComment from '@/components/Modal/ModalComment';
 const Post = dynamic(() => import('@/components/Card/Post'));
 let loading = false;
 
 function Home({ posts }) {
     const [postsState, setPostsState] = useState(posts);
     const [value, setValue] = useState(0);
+    const [openComment, setOpenComment] = useState(false);
     const [page, setPage] = useState(2);
+    const isMatch = useMediaQuery(theme.breakpoints.down("sm"));
     const padreRef = useRef(null);
 
+    console.log({isMatch});
     //#region FUNCTIONS
     useEffect(() => {
         if (padreRef.current === null ) return;
@@ -98,8 +104,9 @@ function Home({ posts }) {
         setPostsState(newPosts);
     };
 
+    const handleOpenComment = () => setOpenComment(true);
 
-    console.log({value, page, postsState});
+    const handleCloseComment = () => setOpenComment(false);
 
     //#endregion
     return (
@@ -113,6 +120,14 @@ function Home({ posts }) {
             <div ref={padreRef} className={CSS.gifContainer}>
                 <Image src='/gifs/rolling1.gif' alt="loading" width={100} height={100} />
             </div>
+            {
+                isMatch && <div>
+                    <Fab  color="primary" aria-label="add" sx={{ position: 'fixed', bottom: 16, right: 16 }} onClick={handleOpenComment}>
+                    <SendIcon />
+                    </Fab>
+                    <ModalComment show={openComment} handleClose={handleCloseComment} />
+                </div>
+            }
         </>
     );
 }
