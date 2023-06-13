@@ -1,6 +1,6 @@
-.formContent{
-  display: flex;
-  flex-direction: column;
+.formContent {
+    display: flex;
+    flex-direction: column;
 }
 
 .file-input {
@@ -23,7 +23,7 @@
     color: gray;
 }
 
-.divider{
+.divider {
     width: 100%;
     padding: 15px;
     border-color: rgb(47, 51, 54);
@@ -31,12 +31,16 @@
 
 .flex {
     display: flex;
+
+    @media (max-width: 690px) {
+        flex-direction: column;
+    }
 }
 
 .flex1 {
     flex: 1;
 }
-.flex2{
+.flex2 {
     flex: 2;
 }
 
@@ -53,13 +57,16 @@
 }
 
 .contentData {
-    flex: 1;
+    flex: 3;
 }
 
 .contentImage {
     flex: 1;
+    @media (max-width: 690px) {
+        display: none;
+        justify-content: center;
+    }
 }
-.flexSpace{
+.flexSpace {
     display: flex;
 }
-

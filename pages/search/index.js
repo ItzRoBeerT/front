@@ -18,14 +18,11 @@ const SearchPage = ({ posts, users, keyParam }) => {
         setPostsState(newPosts);
     };
 
-
     return (
-        <Container className={CSS.container}>
-            { !isHashtag && <UserList users={users} keyParam={keyParam} />}
-            <div className={CSS.postContent}>
-                {postsState.length >= 1 ? postsState.map((post) => <Post key={post._id} post={post} onDeletePost={handleDeletePost} />) : <h1>No posts found</h1>}
-            </div>
-        </Container>
+        <>
+            <Container className={CSS.container}>{!isHashtag && <UserList users={users} keyParam={keyParam} />}</Container>
+            <div className={CSS.postContent}>{postsState.length >= 1 ? postsState.map((post) => <Post key={post._id} post={post} onDeletePost={handleDeletePost} />) : <h1>No posts found</h1>}</div>
+        </>
     );
 };
 

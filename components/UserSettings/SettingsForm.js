@@ -179,7 +179,7 @@ const SettingsForm = ({ user }) => {
     return (
         <form method="post" onSubmit={handleSubmit}>
             <FormControl className={CSS.formControl}>
-                <div className={CSS.flex}>
+                <div className={CSS.flex+ ' ' + CSS.centrar}>
                     <div className={CSS.contentData}>
                         <div className={`${CSS.mainData} ${CSS.flex3}`}>
                             <div className={`${CSS.flex} ${CSS.gap10} ${CSS.mt10}`}>
