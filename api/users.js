@@ -114,3 +114,24 @@ export const logoutUser = async (token) => {
         return null;
     }
 }
+
+export const deleteAccount = async (token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+    try {
+        const res = await axios.delete(`${BASE_URL}/user/deleteAccount`, config);
+        if (res.status === 200) {
+            const user = res.data;
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            return user;
+        }
+      
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+};

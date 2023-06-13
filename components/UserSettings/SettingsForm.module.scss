@@ -1,7 +1,6 @@
 .formControl {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
 }
 
 .layoutInput {
@@ -9,7 +8,8 @@
     border-color: red;
 }
 .layoutLabel {
-    color: rgb(41, 41, 190);
+    // color: rgb(41, 41, 190);
+    color: white;
 }
 
 .inputName {
@@ -62,7 +62,58 @@
 }
 .inputNickname {
     color: white !important;
-    background-color: aliceblue;
-  
+    cursor: not-allowed;
+}
+.flex {
+    display: flex;
 }
 
+.flexSpace{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.flex1 {
+    flex: 1;
+}
+
+.flex3 {
+    flex: 3;
+}
+
+.gap10 {
+    gap: 10px;
+}
+
+.mt10 {
+    margin-top: 10px;
+}
+
+.contentData {
+    flex: 1;
+}
+
+.contentImage {
+    flex: 1;
+}
+
+.textArea {
+    font-family: IBM Plex Sans, sans-serif;
+    font-size: 17px;
+    padding: 4px;
+    height: 100px !important;
+    width: 475px !important;
+}
+.pl10{
+    padding-left: 10px;
+}
+
+.nickNameContent{
+    padding-left: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+}

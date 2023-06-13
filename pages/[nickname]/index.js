@@ -20,13 +20,15 @@ const UserProfile = ({ user, posts, friends }) => {
             });
             dispatch(authSlice.actions.resetChangeUser());
         }
+        console.log({ isSubmitedPost });
 
-        if (isSubmitedPost === false) return;
-        getPostsByNickname(user.nickname).then((res) => {
-            setPosts(res);
-        });
+        if (isSubmitedPost === true) {
+            getPostsByNickname(user.nickname).then((res) => {
+                setPosts(res);
+            });
 
-        dispatch(authSlice.actions.resetChangeUser());
+            dispatch(authSlice.actions.resetSubmitPost());
+        }
     }, [isSubmitedPost, isChangeUser]);
 
     const handleDeletePost = async (postDeleted) => {

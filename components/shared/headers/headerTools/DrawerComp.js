@@ -49,7 +49,7 @@ const DrawerComp = ({user}) => {
 
     return (
         <>
-            <Drawer open={openDrawer} onClose={() => setOpenDrawer(false)} anchor='right' >
+            <Drawer open={openDrawer} onClose={() => setOpenDrawer(false)} anchor='right' PaperProps={{sx: {width: '200px'}}}>
                 {!user ? <List>
                     {PAGES.map((page, index) => (
                         <ListItemButton onClick={() => handleItemClick(page)} key={index}>
@@ -60,7 +60,7 @@ const DrawerComp = ({user}) => {
                     ))}
                 </List> : 
                 <List>
-                    <ListItemButton>
+                    <ListItemButton  className={CSS.avatarMobile}>
                         <ListItemIcon>
                             <UserAvatarMobile user={user} />
                         </ListItemIcon>

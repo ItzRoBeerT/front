@@ -40,9 +40,9 @@ function stringAvatarEdited(name) {
     return {
         sx: {
             bgcolor: stringToColor(name),
-            width: '200px',
-            height: '200px',
-            fontSize: '80px',
+            width: '100px',
+            height: '100px',
+            fontSize: '70px',
 
         },
         children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
@@ -94,12 +94,12 @@ const UserAvatar = ({ isStringAvatar = true }) => {
                                 <Image loader={({ src }) => src} src={user.avatar} height={40} width={40} alt={user.name} priority />
                             </Avatar>
                         ) : (
-                            <Avatar {...stringAvatar(user.name+ ' '+ user.lastName)} />
+                            <Avatar {...stringAvatar(user?.name+ ' '+ user?.lastName)} />
                         )}
                     </IconButton>
                 </Tooltip>
             ) : (
-                <Avatar {...stringAvatarEdited(user.name+ ' '+ user.lastName)} />
+                <Avatar {...stringAvatarEdited(user?.name+ ' '+ user?.lastName)} />
             )}
 
             <Menu

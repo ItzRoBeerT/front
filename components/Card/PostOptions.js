@@ -7,12 +7,14 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import Resizer from "react-image-file-resizer";
+import ModalAreYouSure from '../Modal/ModalAreYouSure';
 
 const PostOptions = ({ post, usersPost }) => {
     //#region VARIABLES
     const user = useSelector((state) => state.auth.user);
     const [isUserLikedPost, setIsUserLikedPost] = useState(false);
     const [likes, setLikes] = useState(post.likedBy.length);
+    const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const token = useSelector((state) => state.auth.userToken);
     const router = useRouter();
     const config = {
@@ -37,12 +39,18 @@ const PostOptions = ({ post, usersPost }) => {
         }
     };
 
+    const handleModal = (value) => {
+        setOpenDeleteModal(value);
+    }
     const likePost = async () => {
         if (isUserLikedPost) {
             try {
                 const res = await axios.post(`http://localhost:3004/post/unlike/${post._id}`, null, config);
-                setLikes(likes - 1);
-                setIsUserLikedPost(false);
+                if(res.code === 200){
+                    setLikes(likes - 1);
+                    setIsUserLikedPost(false);
+                }
+                   
             } catch (error) {
                 console.log(error);
             }
@@ -50,9 +58,12 @@ const PostOptions = ({ post, usersPost }) => {
         }
         try {
             const res = await axios.post(`http://localhost:3004/post/like/${post._id}`, null, config);
-            setLikes(likes + 1);
-            setIsUserLikedPost(true);
+            if (res.code === 200) {
+                setLikes(likes + 1);
+                setIsUserLikedPost(true); 
+            }
         } catch (error) {
+            setOpenDeleteModal(true);
             console.log(error);
         }
     };
@@ -101,6 +112,13 @@ const PostOptions = ({ post, usersPost }) => {
                     <ChatBubbleOutlineIcon />
                 </Button>
             </ButtonGroup>
+            <ModalAreYouSure
+                title={'Account needed'}
+                open={openDeleteModal}
+                onSetOpen={handleModal}
+                contentText={'You need to be logged in to like a post'}
+                withOptions={false}
+            />
         </Box>
     );
 };

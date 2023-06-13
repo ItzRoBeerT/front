@@ -4,10 +4,11 @@ import Post from '@/components/Card/Post';
 import PostCard from '@/components/Card/PostCard';
 import { getPostById } from '@/api/posts';
 import { getUserById } from '@/api/users';
+import CSS from './PostComents.module.scss';
 
 const CommentsPost = ({ post, usersPost }) => {
     return (
-        <Container>
+        <Container className={CSS.content}>
             <PostCard post={post} usersPost={usersPost} />
         </Container>
     );

@@ -1,6 +1,29 @@
+$mobile: 576px;
+$tablet: 992px;
+
 .card{
-    width: 450px;
+    width: 700px;
     margin-bottom: 20px;
+
+    @media (max-width: $tablet) {
+        width: 500px;
+    }
+
+    @media (max-width: $mobile) {
+        width: 100%;
+    }
+}
+.imageWrapper{
+    padding: 10px;
+    height: auto;
+}
+.postImage{
+    border: 1px solid rgb(47, 51, 54);
+    border-radius: 10px;
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
 }
 
 .hashtag{

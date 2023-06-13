@@ -1,5 +1,6 @@
 import { Backdrop, Fade, FormControl, InputLabel, Modal, Input, Button, IconButton, TextareaAutosize } from '@mui/material';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -68,6 +69,12 @@ const ModalComment = ({ show, handleClose }) => {
         }
     };
 
+    const cleanImage = () => {
+        setImage(null);
+        delete post.image;
+    };
+
+
     const resizeFile = (file) =>
         new Promise((resolve) => {
             Resizer.imageFileResizer(
@@ -102,6 +109,10 @@ const ModalComment = ({ show, handleClose }) => {
                             <input type="file" hidden onChange={onFileChange} />
                             <PermMediaIcon color="primary" />
                         </IconButton>
+
+                        {image && <IconButton>
+                            <DeleteIcon color="error" onClick={cleanImage} />
+                        </IconButton>}
                     </div>
                     <Button type="submit" variant="contained" color="primary">
                         Comentar

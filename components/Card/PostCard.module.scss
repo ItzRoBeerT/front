@@ -6,14 +6,32 @@
     border-color: rgb(47, 51, 54);
 }
 .card{
-    margin-bottom: 14px;
     background-color: black;
-    color: white;
-   
+    color: white;   
 }
 .dividerPadding{
     padding: 15px;
 }
+
+.imageWrapper{
+    margin-top: 10px;
+    padding: 5px;
+}
+.cardContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.postImage{
+    border-radius: 10px;
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
 .content{
     border: 1px solid rgb(47, 51, 54);
     padding: 0 !important;
@@ -24,4 +42,5 @@
 }
 .text{
     color: white;
+    padding-bottom: 10px;
 }

@@ -1,18 +1,61 @@
-import { Avatar, Button, FormControl, FormLabel, IconButton, Input, TextField } from '@mui/material';
-import PermMediaIcon from '@mui/icons-material/PermMedia';
-import Image from 'next/image';
+import { Avatar, Button, FormControl, FormLabel, IconButton, Input, TextField, TextareaAutosize } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Resizer from 'react-image-file-resizer';
-import { updateUserInfo } from '@/api/users';
+import { deleteAccount, updateUserInfo } from '@/api/users';
 import CSS from './SettingsForm.module.scss';
 import authSlice from '@/store/auth-slice';
 import UserAvatar from '../shared/headers/headerTools/UserAvatar';
+import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
+import ModalAreYouSure from '../Modal/ModalAreYouSure';
+
+const CssTextField = styled(TextField)({
+    '& label.Mui-focused': {
+        color: 'rgb(41, 41, 190)',
+    },
+    '& .MuiInput-underline:after': {
+        borderBottomColor: '#B2BAC2',
+    },
+    '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+            borderColor: 'rgb(41, 41, 190)',
+        },
+        '&:hover fieldset': {
+            borderColor: '#B2BAC2',
+        },
+        '&.Mui-focused fieldset': {
+            borderColor: '#E0E3E7',
+        },
+    },
+});
+
+const CssTextFieldDisabled = styled(TextField)({
+    '& label.Mui-focused': {
+        color: 'rgb(41, 41, 190)',
+    },
+    '& .MuiInput-underline:after': {
+        borderBottomColor: 'red',
+    },
+    '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+            borderColor: 'rgb(41, 41, 190)',
+        },
+        '&:hover fieldset': {
+            borderColor: 'red',
+        },
+        '&.Mui-focused fieldset': {
+            borderColor: '#E0E3E7',
+        },
+    },
+});
 
 const SettingsForm = ({ user }) => {
     const [updates, setUpdates] = useState({});
     const [avatar, setAvatar] = useState(null);
+    const [openDialog, setOpenDialog] = useState(false);
     const dispatch = useDispatch();
+    const router = useRouter();
     const token = useSelector((state) => state.auth.userToken);
 
     //#region FUNCTIONS
@@ -27,10 +70,29 @@ const SettingsForm = ({ user }) => {
     };
 
     const handleChange = (e) => {
-        setUpdates({
-            ...updates,
-            [e.target.id]: e.target.value,
-        });
+        if (e.target.id === 'date') {
+            const age = getAgeFromDate(e.target.value);
+            setUpdates({
+                ...updates,
+                age: age,
+            });
+        } else {
+            setUpdates({
+                ...updates,
+                [e.target.id]: e.target.value,
+            });
+        }
+    };
+
+    const getAgeFromDate = (date) => {
+        const today = new Date();
+        const birthDate = new Date(date);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const month = today.getMonth() - birthDate.getMonth();
+        if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
     };
 
     const onFileChange = async (e) => {
@@ -54,115 +116,178 @@ const SettingsForm = ({ user }) => {
         }
     };
 
-    const resizeFile = (file) => new Promise(resolve => {
-        Resizer.imageFileResizer(file, 300, 300, 'JPEG', 100, 0,
-            uri => {
-                resolve(uri);
-            },
-            'base64'
-        );
-    });
+    const handleDialog = (value) => {
+        setOpenDialog(value);
+    };
+    74;
+
+    const handleDeleteAccount = async () => {
+        const res = await deleteAccount(token);
+        if (res) {
+            dispatch(authSlice.actions.logout());
+            router.push('/');
+        }
+    };
+    const getDateFromAge = (age) => {
+        const date = new Date();
+        date.setFullYear(date.getFullYear() - age);
+        return date.toISOString().split('T')[0];
+    };
+
+    const resizeFile = (file) =>
+        new Promise((resolve) => {
+            Resizer.imageFileResizer(
+                file,
+                300,
+                300,
+                'JPEG',
+                100,
+                0,
+                (uri) => {
+                    resolve(uri);
+                },
+                'base64'
+            );
+        });
 
     //#endregion
 
     return (
         <form method="post" onSubmit={handleSubmit}>
             <FormControl className={CSS.formControl}>
-                <FormLabel>Username</FormLabel>
-                <TextField
-                    label="your name"
-                    type="text"
-                    id="name"
-                    focused
-                    defaultValue={user.name}
-                    onChange={handleChange}
-                    className={CSS.textField}
-                    inputProps={{ className: CSS.inputName }}
-                    InputLabelProps={{ className: CSS.labelName }}
-                />
-                <FormLabel>Last name</FormLabel>
-                <TextField
-                    label="your last name"
-                    type="text"
-                    id="lastName"
-                    focused
-                    defaultValue={user.lastName}
-                    onChange={handleChange}
-                    inputProps={{ className: CSS.inputLastName }}
-                    InputLabelProps={{ className: CSS.labelLastName }}
-                />
-                <FormLabel>Bio</FormLabel>
-                <TextField
-                    label="your bio"
-                    type="text"
-                    focused
-                    id="bio"
-                    defaultValue={user.bio}
-                    onChange={handleChange}
-                    inputProps={{ className: CSS.inputBio }}
-                    InputLabelProps={{ className: CSS.labelBio }}
-                />
-           
-              
-                <FormLabel>Age</FormLabel>
-                <TextField
-                    label="your age"
-                    type="number"
-                    id="age"
-                    focused
-                    defaultValue={user.age}
-                    onChange={handleChange}
-                    inputProps={{ className: CSS.inputAge }}
-                    InputLabelProps={{ className: CSS.labelAge }}
-                />
-                <FormLabel>email</FormLabel>
-                <TextField
-                    label="your email"
-                    type="text"
-                    id="email"
-                    focused
-                    defaultValue={user.email}
-                    onChange={handleChange}
-                    inputProps={{ className: CSS.inputEmail }}
-                    InputLabelProps={{ className: CSS.labelEmail }}
-                />
-                <FormLabel>Password</FormLabel>
-                <TextField
-                    label="your password"
-                    type="password"
-                    id="password"
-                    focused
-                    defaultValue={user.password}
-                    onChange={handleChange}
-                    inputProps={{ className: CSS.inputPassword }}
-                    InputLabelProps={{ className: CSS.labelPassword }}
-                />
-                <FormLabel>Nickname</FormLabel>
-                <TextField
-                    label="your nickname"
-                    type="text"
-                    id="nickname"
-                    focused
-                    defaultValue={user.nickname}
-                    disabled
-                    inputProps={{ className: CSS.inputNickname }}
-                    InputLabelProps={{ className: CSS.labelNickname }}
-                />
-                <IconButton>
-                    <IconButton component="label">
-                        <input type="file" hidden onChange={onFileChange} />
-                        {avatar !== null ? (
-                            <Avatar src={avatar} sx={{width: '200px', height: '200px'}} width={200} height={200} alt={avatar} />
-                        ) : user.avatar ? (
-                            <Avatar src={user.avatar} sx={{width: '200px', height: '200px'}} width={200} height={200} alt={user.avatar} />
-                        ) : (
-                            <UserAvatar  isStringAvatar={false} />
-                        )}
-                    </IconButton>
-                </IconButton>
-                <Button type="submit" variant="outlined">
-                    Save
-                </Button>
+                <div className={CSS.flex}>
+                    <div className={CSS.contentData}>
+                        <div className={`${CSS.mainData} ${CSS.flex3}`}>
+                            <div className={`${CSS.flex} ${CSS.gap10} ${CSS.mt10}`}>
+                                <CssTextField
+                                    label="your name"
+                                    type="text"
+                                    id="name"
+                                    defaultValue={user.name}
+                                    onChange={handleChange}
+                                    className={CSS.flex1}
+                                    inputProps={{ className: CSS.inputName }}
+                                    InputLabelProps={{ className: CSS.labelName }}
+                                />
+                                <CssTextField
+                                    label="your last name"
+                                    type="text"
+                                    id="lastName"
+                                    className={CSS.flex1}
+                                    defaultValue={user.lastName}
+                                    onChange={handleChange}
+                                    inputProps={{ className: CSS.inputLastName }}
+                                    InputLabelProps={{ className: CSS.labelLastName }}
+                                />
+                            </div>
+                            <div className={`${CSS.flex} ${CSS.gap10} ${CSS.mt10}`}>
+                                <CssTextField
+                                    label="your email"
+                                    type="text"
+                                    id="email"
+                                    className={CSS.flex3}
+                                    defaultValue={user.email}
+                                    onChange={handleChange}
+                                    inputProps={{ className: CSS.inputEmail }}
+                                    InputLabelProps={{ className: CSS.labelEmail }}
+                                />
+
+                                <CssTextField
+                                    type="date"
+                                    id="age"
+                                    className={CSS.flex1}
+                                    defaultValue={getDateFromAge(user.age)}
+                                    onChange={handleChange}
+                                    inputProps={{ className: CSS.inputAge }}
+                                    InputLabelProps={{ className: CSS.labelAge }}
+                                />
+                            </div>
+                            <div className={`${CSS.flex} ${CSS.gap10} ${CSS.mt10}`}>
+                                <CssTextField
+                                    label="your password"
+                                    type="password"
+                                    id="password"
+                                    className={CSS.flex1}
+                                    defaultValue={user.password}
+                                    onChange={handleChange}
+                                    inputProps={{ className: CSS.inputPassword }}
+                                    InputLabelProps={{ className: CSS.labelPassword }}
+                                />
+
+                                <CssTextField
+                                    label="repeat password"
+                                    type="password"
+                                    id="repeatPassword"
+                                    className={CSS.flex1}
+                                    defaultValue={user.password}
+                                    onChange={handleChange}
+                                    inputProps={{ className: CSS.inputPassword }}
+                                    InputLabelProps={{ className: CSS.labelPassword }}
+                                />
+                            </div>
+                        </div>
+
+                        <div className={`${CSS.flex} ${CSS.gap10} ${CSS.mt10}`}>
+                            <TextareaAutosize
+                                type="text"
+                                placeholder="Tell us about yourself..."
+                                id="bio"
+                                minRows={5}
+                                maxRows={5}
+                                maxLength={200}
+                                className={`${CSS.flex1} ${CSS.textArea}`}
+                                defaultValue={user.bio}
+                                onChange={handleChange}
+                            />
+                        </div>
+                    </div>
+                    <div className={CSS.contentImage + ' ' + CSS.flexSpace}>
+                        <IconButton>
+                            <IconButton component="label">
+                                <input type="file" hidden onChange={onFileChange} />
+                                {avatar !== null ? (
+                                    <Avatar src={avatar} sx={{ width: '100px', height: '100px' }} width={100} height={100} alt={avatar} />
+                                ) : user.avatar ? (
+                                    <Avatar src={user.avatar} sx={{ width: '100px', height: '100px' }} width={100} height={100} alt={user.avatar} />
+                                ) : (
+                                    <UserAvatar isStringAvatar={false} />
+                                )}
+                            </IconButton>
+                        </IconButton>
+                        <div className={CSS.nickNameContent}>
+                            <CssTextFieldDisabled
+                                label="your nickname"
+                                type="text"
+                                id="nickname"
+                                disabled
+                                sx={{
+                                    '& .MuiInputBase-input.Mui-disabled': {
+                                        WebkitTextFillColor: 'white',
+                                    },
+                                }}
+                                defaultValue={user.nickname}
+                                inputProps={{ className: CSS.inputNickname }}
+                                InputLabelProps={{ className: CSS.labelNickname }}
+                            />
+                        </div>
+
+                        <div className={`${CSS.flex} ${CSS.gap10} ${CSS.mt10} ${CSS.pl10}`}>
+                            <Button type="submit" variant="outlined" color="secondary">
+                                Save
+                            </Button>
+                            <Button type="button" variant="outlined" color="error" onClick={() => handleDialog(true)}>
+                                Delete
+                            </Button>
+                            <ModalAreYouSure
+                                title={'DELETE ACCOUNT'}
+                                contentText={'Are you sure you want to delete your account?'}
+                                open={openDialog}
+                                onSetOpen={handleDialog}
+                                handleEvent={handleDeleteAccount}
+                            />
+                        </div>
+                    </div>
+                </div>
             </FormControl>
         </form>
     );

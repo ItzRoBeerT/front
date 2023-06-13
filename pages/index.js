@@ -1,11 +1,11 @@
-import { Button, Container } from '@mui/material';
+import { Container } from '@mui/material';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { getPopularPosts, getRecentPosts } from '@/api/posts';
 import { useEffect, useRef, useState } from 'react';
 import CSS from '@/styles/Home.module.scss';
 import MiniHeader from '@/components/shared/headers/MiniHeader';
-import { includeArray } from '@/functions/methods';
+import { includeArray } from '@/utils/functions/methods';
 const Post = dynamic(() => import('@/components/Card/Post'));
 let loading = false;
 
@@ -86,12 +86,12 @@ function Home({ posts }) {
     };
 
     const getValue = (value) => {
-        setValue(value);
         if (value === 0) {
             getInitialPosts();
         } else {
             getFeaturedPosts();
         }
+        setValue(value);
     };
     const handleDeletePost = async (postDeleted) => {
         const newPosts = postsState.filter((post) => post._id !== postDeleted._id);
@@ -99,7 +99,7 @@ function Home({ posts }) {
     };
 
 
-    console.log({value, page});
+    console.log({value, page, postsState});
 
     //#endregion
     return (

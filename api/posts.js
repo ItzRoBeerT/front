@@ -168,3 +168,20 @@ export const getPopularPosts = async (page) => {
 
     return posts;
 }
+
+export const likePost = async (postId, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    try {
+        const res = await axios.post(BASE_URL + `post/like/${postId}`, {}, config);
+        if (res.status === 200) {
+            return res.data;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
