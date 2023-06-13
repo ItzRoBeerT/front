@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 //#region  COMPONENTS
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
+    display: 'inline-flex', 
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.white, 0.15),
     '&:hover': {
