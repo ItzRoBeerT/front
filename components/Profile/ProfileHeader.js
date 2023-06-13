@@ -92,8 +92,8 @@ const ProfileHeader = ({ user, posts, friends, onDeletePost }) => {
                     ))}
                 </div>
             ) : (
-                <div className={CSS.listContent}>
-                    <List>
+                <div >
+                    <List  sx={{display: 'flex', gap: '10px', flexDirection: 'column'}}>
                         {friends.map((friend) => (
                             <Follower key={friend._id} friend={friend} />
                         ))}

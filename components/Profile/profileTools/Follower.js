@@ -16,7 +16,7 @@ const Follower = ({ friend }) => {
     };
 
     return (
-        <ListItemButton key={friend._id} onClick={goToProfile}>
+        <ListItemButton key={friend._id} onClick={goToProfile} sx={{border: '1px solid white', borderRadius: '10px'}}>
             <ListItemAvatar>
                 <CustomAvatar user={friend} />
             </ListItemAvatar>

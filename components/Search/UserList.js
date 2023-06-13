@@ -31,15 +31,15 @@ const UserList = ({ users, keyParam }) => {
                 </ListSubheader>
             }
         >
-            <ListItemButton onClick={handleClick}>
+            <ListItemButton onClick={handleClick} sx={{background: '#111'}}>
                 <ListItemIcon>
                     <PersonIcon sx={{ color: 'white' }} />
                 </ListItemIcon>
                 <ListItemText primary="Users" />
                 {open ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
-            <Collapse in={open} timeout="auto" unmountOnExit sx={{ color: 'white' }}>
-                <List component="div" disablePadding>
+            <Collapse in={open} timeout="auto" unmountOnExit sx={{ color: 'white', background:'black' }}>
+                <List component="div" disablePadding className={CSS.list}>
                     {users.length >= 1 ? (
                         users.map((user) => (
                             <ListItemButton key={user._id} onClick={() => goToProfile(user)}>

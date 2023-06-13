@@ -4,6 +4,7 @@ $tablet: 992px;
 .card{
     width: 700px;
     margin-bottom: 20px;
+    background-color: #ddd;
 
     @media (max-width: $tablet) {
         width: 500px;

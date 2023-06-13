@@ -1,5 +1,5 @@
 .card{
-    background-color: black;
+    background-color: transparent;
 }
 
 .text{
@@ -17,11 +17,6 @@
     align-items: center;
 }
 .tabsContent{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.listContent{
     display: flex;
     flex-direction: column;
     align-items: center;

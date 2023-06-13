@@ -291,6 +291,7 @@ const SettingsForm = ({ user }) => {
                                     '& .MuiInputBase-input.Mui-disabled': {
                                         WebkitTextFillColor: 'white',
                                     },
+                                    flex: 1,
                                 }}
                                 defaultValue={user.nickname}
                                 inputProps={{ className: CSS.inputNickname }}
