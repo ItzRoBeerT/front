@@ -108,12 +108,13 @@ function Home({ posts }) {
 
     const handleCloseComment = () => setOpenComment(false);
 
+    console.log({postsState});
     //#endregion
     return (
         <>
             <MiniHeader onSendValue={getValue} />
             <Container className={CSS.container}>
-                {postsState.map((post, index) => (
+                {postsState !== null  && postsState.map((post, index) => (
                     <Post key={post._id} post={post} onDeletePost={handleDeletePost} />
                 ))}
             </Container>
@@ -135,7 +136,7 @@ function Home({ posts }) {
 export const getServerSideProps = async () => {
     // let allPosts = await obtenerTodosPosts();
     let recentPosts = await getRecentPosts(1);
-
+    
     return {
         props: {
             // posts: allPosts,

@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'https://tfg-backend-k70e.onrender.com';
+const BASE_URL = 'https://tfg-backend-k70e.onrender.com/';
 
 export const obtenerTodosPosts = async () => {
     let posts = null;

@@ -1,17 +1,18 @@
-import axios from "axios";
-import { FormControl, InputLabel, Modal, Fade, Backdrop, Input, Button } from "@mui/material";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import authSlice from "@/store/auth-slice";
-import CSS from "./ModalLogin.module.scss";
+import axios from 'axios';
+import { FormControl, InputLabel, Modal, Fade, Backdrop, Input, Button } from '@mui/material';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import authSlice from '@/store/auth-slice';
+import CSS from './ModalLogin.module.scss';
+import { loginUser } from '@/api/users';
 
 const ModalLogin = ({ show, handleClose }) => {
     //#region VARIABLESSTATES
     const [credentials, setCredentials] = useState({
-        email: "",
-        password: "",
+        email: '',
+        password: '',
     });
     const dispatch = useDispatch();
     const router = useRouter();
@@ -26,18 +27,11 @@ const ModalLogin = ({ show, handleClose }) => {
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const res = await axios.post("http://localhost:3004/user/login", credentials);
-            if (res.data.token) {
-                if (typeof window !== "undefined") {
-                    localStorage.setItem("token", res.data.token);
-                    localStorage.setItem("user", JSON.stringify(res.data.user));
-                }
-                dispatch(authSlice.actions.login(res.data.user));
-                router.push("/");
-            }
-        } catch (e) {
-            console.log(e);
+
+        const res = await loginUser(credentials);
+        if (res) {
+            dispatch(authSlice.actions.login(res.user));
+            router.push('/');
         }
     };
     //#endregion
@@ -60,7 +54,7 @@ const ModalLogin = ({ show, handleClose }) => {
                 <Fade in={show} className={CSS.modal}>
                     <form method="post" onSubmit={handleSubmit}>
                         <FormControl className={CSS.formControl}>
-                            <InputLabel className={CSS.input} htmlFor="email" >
+                            <InputLabel className={CSS.input} htmlFor="email">
                                 Email address
                             </InputLabel>
                             <Input id="email" type="email" className={CSS.input} onChange={handleChange} />
@@ -75,7 +69,10 @@ const ModalLogin = ({ show, handleClose }) => {
                             Iniciar sesion
                         </Button>
                         <small className={CSS.register}>
-                            Need an account? <Link href="/register" onClick={handleClose}><span className={CSS.link}>Register here</span></Link>
+                            Need an account?{' '}
+                            <Link href="/register" onClick={handleClose}>
+                                <span className={CSS.link}>Register here</span>
+                            </Link>
                         </small>
                     </form>
                 </Fade>
@@ -84,5 +81,5 @@ const ModalLogin = ({ show, handleClose }) => {
     );
 };
 
-ModalLogin.dispatch = "ModalLogin";
+ModalLogin.dispatch = 'ModalLogin';
 export default ModalLogin;

@@ -23,6 +23,29 @@ export const getAllNicknames = async () => {
     }
 };
 
+export const loginUser = async (credentials) => {
+
+
+    try {
+        const res = await axios.post(`${BASE_URL}/user/login`, credentials);
+
+        if(res.data.token){
+            if (typeof window !== "undefined") {
+                localStorage.setItem("token", res.data.token);
+                localStorage.setItem("user", JSON.stringify(res.data.user));
+            }
+          
+        }
+        const token = res.data.token;
+        const user = res.data.user;
+        return { token, user };
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+
+};
+
 export const getAllEmails = async () => {
     try {
         const res = await axios.get(`${BASE_URL}/user/emails`);
