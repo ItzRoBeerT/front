@@ -12,6 +12,28 @@ export const getUserById = async (id) => {
     }
 };
 
+export const getAllNicknames = async () => {
+    try {
+        const res = await axios.get(`${BASE_URL}/user/nicknames`);
+        const nicknames = res.data;
+        return nicknames;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+};
+
+export const getAllEmails = async () => {
+    try {
+        const res = await axios.get(`${BASE_URL}/user/emails`);
+        const emails = res.data;
+        return emails;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+};
+
 export const createNewUser = async (user) => {
     try {
         const res = await axios.post(`${BASE_URL}/user/createAccount`, user);

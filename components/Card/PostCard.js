@@ -1,6 +1,6 @@
-import Image from 'next/image';
-import { Avatar, Card, CardContent, CardHeader, CardMedia, Container, Divider, IconButton, Typography } from '@mui/material';
+import { Card, CardContent, CardHeader, CardMedia, Container, Divider, IconButton, Typography } from '@mui/material';
 import moment from 'moment/moment';
+import React from 'react';
 import { useState } from 'react';
 import Comments from './Comments';
 import Reply from './Reply';
@@ -12,6 +12,19 @@ const PostCard = ({ post, usersPost }) => {
 
     const handleComments = (newComments) => {
         setComments(newComments);
+    };
+
+    const highlightHashtags = (content) => {
+        const hashtagRegex = /#\w+/g;
+        const parts = content.split(hashtagRegex);
+        const matches = content.match(hashtagRegex);
+
+        return parts.map((part, index) => (
+            <React.Fragment key={index}>
+                {part}
+                {matches && matches[index] && <span className={CSS.hashtag}>{matches[index]}</span>}
+            </React.Fragment>
+        ));
     };
 
     return (
@@ -26,7 +39,7 @@ const PostCard = ({ post, usersPost }) => {
                 />
                 <CardContent>
                     <Typography variant="body2" className={CSS.text}>
-                        {post.content}
+                        {highlightHashtags(post.content)}
                     </Typography>
                     <div className={CSS.cardContent}>
                         {post.image && (

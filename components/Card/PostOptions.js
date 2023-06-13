@@ -6,7 +6,7 @@ import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import Resizer from "react-image-file-resizer";
+import Resizer from 'react-image-file-resizer';
 import ModalAreYouSure from '../Modal/ModalAreYouSure';
 
 const PostOptions = ({ post, usersPost }) => {
@@ -41,16 +41,13 @@ const PostOptions = ({ post, usersPost }) => {
 
     const handleModal = (value) => {
         setOpenDeleteModal(value);
-    }
+    };
     const likePost = async () => {
         if (isUserLikedPost) {
             try {
                 const res = await axios.post(`http://localhost:3004/post/unlike/${post._id}`, null, config);
-                if(res.code === 200){
-                    setLikes(likes - 1);
-                    setIsUserLikedPost(false);
-                }
-                   
+                setLikes(likes - 1);
+                setIsUserLikedPost(false);
             } catch (error) {
                 console.log(error);
             }
@@ -58,18 +55,14 @@ const PostOptions = ({ post, usersPost }) => {
         }
         try {
             const res = await axios.post(`http://localhost:3004/post/like/${post._id}`, null, config);
-            if (res.code === 200) {
-                setLikes(likes + 1);
-                setIsUserLikedPost(true); 
-            }
+
+            setLikes(likes + 1);
+            setIsUserLikedPost(true);
         } catch (error) {
             setOpenDeleteModal(true);
             console.log(error);
         }
     };
-
-
-    
 
     const commentPost = () => {
         router.push({ pathname: `/post/${post._id}` });
@@ -91,7 +84,7 @@ const PostOptions = ({ post, usersPost }) => {
                 <Button onClick={likePost}>
                     {!isUserLikedPost ? (
                         <>
-                            <Typography variant="caption" component="div" sx={{ color: 'red',  float: 'left' }}>
+                            <Typography variant="caption" component="div" sx={{ color: 'red', float: 'left' }}>
                                 {likes}
                             </Typography>
                             <FavoriteBorderIcon sx={{ color: 'red' }} />
@@ -112,13 +105,7 @@ const PostOptions = ({ post, usersPost }) => {
                     <ChatBubbleOutlineIcon />
                 </Button>
             </ButtonGroup>
-            <ModalAreYouSure
-                title={'Account needed'}
-                open={openDeleteModal}
-                onSetOpen={handleModal}
-                contentText={'You need to be logged in to like a post'}
-                withOptions={false}
-            />
+            <ModalAreYouSure title={'Account needed'} open={openDeleteModal} onSetOpen={handleModal} contentText={'You need to be logged in to like a post'} withOptions={false} />
         </Box>
     );
 };

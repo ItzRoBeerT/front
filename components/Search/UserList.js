@@ -1,15 +1,22 @@
-import { Button, Collapse, List, ListItem, ListItemButton, ListItemIcon, ListItemText, ListSubheader, Typography } from '@mui/material';
+import {  Collapse, List, ListItem, ListItemButton, ListItemIcon, ListItemText, ListSubheader, Typography } from '@mui/material';
 import { useState } from 'react';
 import PersonIcon from '@mui/icons-material/Person';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import CSS from './UserList.module.scss';
+import CustomAvatar from '../shared/headers/headerTools/CustomAvatar';
+import { useRouter } from 'next/router';
 
 const UserList = ({ users, keyParam }) => {
     const [open, setOpen] = useState(true);
+    const router = useRouter();
 
     const handleClick = () => {
         setOpen(!open);
     };
+
+    const goToProfile = (user) => {
+        router.push(`/${user.nickname}`);
+    }
 
     return (
         <List
@@ -35,9 +42,9 @@ const UserList = ({ users, keyParam }) => {
                 <List component="div" disablePadding>
                     {users.length >= 1 ? (
                         users.map((user) => (
-                            <ListItemButton key={user._id}>
+                            <ListItemButton key={user._id} onClick={() => goToProfile(user)}>
                                 <ListItem key={user._id}>
-                                    <PersonIcon sx={{ color: 'white' }} />
+                                    <CustomAvatar user={user} />
                                     <ListItemText primary={user.nickname} />
                                 </ListItem>
                             </ListItemButton>

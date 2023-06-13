@@ -28,7 +28,9 @@ const CssTextField = styled(TextField)({
     },
 });
 
-const FormRegister = () => {
+const NICKNAMESNOTALLOWED = ['admin', 'post', 'register', 'settings', 'search'];
+
+const FormRegister = ({ nicknames, emails }) => {
     //#region VARIABLES
     const [image, setImage] = useState('');
     const [user, setUser] = useState({
@@ -40,7 +42,16 @@ const FormRegister = () => {
         nickname: '',
     });
     const [error, setError] = useState(false);
+    const [errorNickname, setErrorNickname] = useState(false);
+    const [lblNicknameError, setLblNicknameError] = useState('Nickname already exists');
+    const [errorEmail, setErrorEmail] = useState(false);
+    const [lblEmailError, setLblEmailError] = useState('Email already exists');
+    const [errorPassword, setErrorPassword] = useState(false);
+    const [errorAge, setErrorAge] = useState(false);
+    const [errorName, setErrorName] = useState(false);
+    const [errorLastName, setErrorLastName] = useState(false);
     const [openModal, setOpenModal] = useState(false);
+    const [openModalError, setOpenModalError] = useState(false);
     const router = useRouter();
     //#endregion
 
@@ -81,10 +92,13 @@ const FormRegister = () => {
 
     const handleModal = (value) => {
         setOpenModal(value);
-    }
+    };
+    const handleModalError = (value) => {
+        setOpenModalError(value);
+    };
     const goToHome = () => {
         router.push('/');
-    }
+    };
 
     const resizeFile = (file) =>
         new Promise((resolve) => {
@@ -104,13 +118,60 @@ const FormRegister = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (user.name === '' || user.lastName === '' || user.email === '' || user.password === '' || user.age === 0 || user.nickname === '') {
+            if (user.name === '') {
+                setErrorName(true);
+            }
+            if (user.lastName === '') {
+                setErrorLastName(true);
+            }
+            if (user.email === '') {
+                setErrorEmail(true);
+                setLblEmailError('Email is required');
+            }
+            if (user.password === '') {
+                setErrorPassword(true);
+            }
+            if (user.age === 0) {
+                setErrorAge(true);
+            }
+            if (user.nickname === '') {
+                setErrorNickname(true);
+                setLblNicknameError('Nickname is required');
+            }
+            handleModalError(true);
+            return;
+        }
+
+        if (errorNickname || error) {
+            handleModalError(true);
+            return;
+        }
         const res = await createNewUser(user);
         if (res) {
-            console.log('Usuario creado correctamente');
             handleModal(true);
         }
     };
+
     const handleChange = (e) => {
+        if (e.target.id === 'nickname' && NICKNAMESNOTALLOWED.includes(e.target.value)) {
+            setErrorNickname(true);
+            setLblNicknameError('Nickname not allowed');
+        } else if (nicknames.includes(e.target.value)) {
+            setErrorNickname(true);
+            setLblNicknameError('Nickname already exists');
+        } else {
+            setErrorNickname(false);
+        }
+
+        if (e.target.id === 'email' && emails.includes(e.target.value)) {
+            setErrorEmail(true);
+            setLblEmailError('Email already exists');
+        } else {
+            setErrorEmail(false);
+        }
+
         if (e.target.id === 'age') {
             const age = getAgeFromDate(e.target.value);
 
@@ -134,6 +195,8 @@ const FormRegister = () => {
                         <div className={CSS.flex3}>
                             <div className={`${CSS.flex} ${CSS.gap10} ${CSS.mt10}`}>
                                 <CssTextField
+                                    error={errorName}
+                                    helperText={errorName ? 'Name is required' : ''}
                                     label="your name"
                                     type="text"
                                     id="name"
@@ -148,6 +211,8 @@ const FormRegister = () => {
                                 />
                                 <CssTextField
                                     label="your last name"
+                                    error={errorLastName}
+                                    helperText={errorLastName ? 'Last name is required' : ''}
                                     type="text"
                                     id="lastName"
                                     className={CSS.flex1}
@@ -160,6 +225,8 @@ const FormRegister = () => {
                                     }}
                                 />
                                 <CssTextField
+                                    error={errorNickname}
+                                    helperText={errorNickname ? lblNicknameError : ''}
                                     label="your nickname"
                                     type="text"
                                     id="nickname"
@@ -177,6 +244,8 @@ const FormRegister = () => {
                             <div className={`${CSS.flex} ${CSS.gap10} ${CSS.mt10}`}>
                                 <CssTextField
                                     label="your email"
+                                    error={errorEmail}
+                                    helperText={errorEmail ? lblEmailError : ''}
                                     type="text"
                                     id="email"
                                     onChange={handleChange}
@@ -190,6 +259,8 @@ const FormRegister = () => {
                                 ></CssTextField>
                                 <CssTextField
                                     label="your password"
+                                    error={errorPassword}
+                                    helperText={errorPassword ? 'Password is required' : ''}
                                     type="password"
                                     id="password"
                                     className={CSS.flex1}
@@ -203,6 +274,8 @@ const FormRegister = () => {
                                 ></CssTextField>
                                 <CssTextField
                                     type="date"
+                                    error={errorAge}
+                                    helperText={errorAge ? 'Age is required' : ''}
                                     id="age"
                                     className={CSS.flex1}
                                     onChange={handleChange}
@@ -236,11 +309,18 @@ const FormRegister = () => {
             </FormControl>
             <ModalAreYouSure
                 title={'Account created successfully'}
-                description={'Your account has been created successfully, you can now log in'}
+                contentText={'Your account has been created successfully, you can now log in'}
                 open={openModal}
                 withOptions={false}
                 onSetOpen={handleModal}
                 handleEvent={goToHome}
+            />
+            <ModalAreYouSure
+                title={'There was an error creating your account'}
+                contentText={'Check that the data is correct and try again'}
+                open={openModalError}
+                withOptions={false}
+                onSetOpen={handleModalError}
             />
         </form>
     );

@@ -60,7 +60,7 @@ const ModalLogin = ({ show, handleClose }) => {
                 <Fade in={show} className={CSS.modal}>
                     <form method="post" onSubmit={handleSubmit}>
                         <FormControl className={CSS.formControl}>
-                            <InputLabel className={CSS.input} htmlFor="email">
+                            <InputLabel className={CSS.input} htmlFor="email" >
                                 Email address
                             </InputLabel>
                             <Input id="email" type="email" className={CSS.input} onChange={handleChange} />
@@ -74,8 +74,8 @@ const ModalLogin = ({ show, handleClose }) => {
                         <Button type="submit" variant="contained" className={CSS.btn} onClick={handleClose}>
                             Iniciar sesion
                         </Button>
-                        <small>
-                            Need an account? <Link href="/register" onClick={handleClose}>Register here</Link>
+                        <small className={CSS.register}>
+                            Need an account? <Link href="/register" onClick={handleClose}><span className={CSS.link}>Register here</span></Link>
                         </small>
                     </form>
                 </Fade>

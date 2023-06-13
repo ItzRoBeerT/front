@@ -54,18 +54,31 @@ const SettingsForm = ({ user }) => {
     const [updates, setUpdates] = useState({});
     const [avatar, setAvatar] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
+    const [confirmPwd, setConfirmPwd] = useState('');
+    const [errorPwd, setErrorPwd] = useState(false);
+    const [openDialogCorrect , setOpenDialogCorrect] = useState(false);
     const dispatch = useDispatch();
     const router = useRouter();
     const token = useSelector((state) => state.auth.userToken);
+    
 
     //#region FUNCTIONS
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (updates === {}) return;
 
+        console.log({confirmPwd, realPwd: updates.password});
+        if (confirmPwd !== updates.password) {
+            setErrorPwd(true);
+            return;
+        }
+
+        setErrorPwd(false);
+
         const res = await updateUserInfo(updates, token);
         if (res) {
             dispatch(authSlice.actions.updateUser(res));
+            setOpenDialogCorrect(true);
         }
     };
 
@@ -83,6 +96,11 @@ const SettingsForm = ({ user }) => {
             });
         }
     };
+
+   
+    const handleRepeatPwd = (e) => {
+        setConfirmPwd(e.target.value);
+    }
 
     const getAgeFromDate = (date) => {
         const today = new Date();
@@ -119,7 +137,13 @@ const SettingsForm = ({ user }) => {
     const handleDialog = (value) => {
         setOpenDialog(value);
     };
-    74;
+    const handleDialogCorrect = (value) => {
+        setOpenDialogCorrect(value);
+    };
+
+    const goToProfile = () => {
+        router.push('/'+user.nickname);
+    }
 
     const handleDeleteAccount = async () => {
         const res = await deleteAccount(token);
@@ -205,6 +229,8 @@ const SettingsForm = ({ user }) => {
                             <div className={`${CSS.flex} ${CSS.gap10} ${CSS.mt10}`}>
                                 <CssTextField
                                     label="your password"
+                                    error={errorPwd}
+                                    helperText={errorPwd ? 'Passwords do not match' : ''}
                                     type="password"
                                     id="password"
                                     className={CSS.flex1}
@@ -216,11 +242,12 @@ const SettingsForm = ({ user }) => {
 
                                 <CssTextField
                                     label="repeat password"
+                                    error={errorPwd}
+                                    helperText={errorPwd ? 'Passwords do not match' : ''}
                                     type="password"
                                     id="repeatPassword"
                                     className={CSS.flex1}
-                                    defaultValue={user.password}
-                                    onChange={handleChange}
+                                    onChange={handleRepeatPwd}
                                     inputProps={{ className: CSS.inputPassword }}
                                     InputLabelProps={{ className: CSS.labelPassword }}
                                 />
@@ -284,6 +311,14 @@ const SettingsForm = ({ user }) => {
                                 open={openDialog}
                                 onSetOpen={handleDialog}
                                 handleEvent={handleDeleteAccount}
+                            />
+                             <ModalAreYouSure
+                                title={'ACCOUNT  UPDATED'}
+                                contentText={'Your account has been updated successfully'}
+                                open={openDialogCorrect}
+                                withOptions={false}
+                                onSetOpen={handleDialogCorrect}
+                                handleEvent={goToProfile}
                             />
                         </div>
                     </div>

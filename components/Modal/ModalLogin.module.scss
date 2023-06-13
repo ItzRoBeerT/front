@@ -4,10 +4,26 @@
 }
 .formControl {
     color: white ;
+    padding: 5px;
 }
 
 .input {
     color: white;
+    padding: 10px;
+}
+.register{
+    margin-top: 10px;
+}
+.link{
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    &:hover{
+        color: #0056b3;
+        text-decoration: underline;
+    }
 }
 
 .modal {
@@ -19,7 +35,7 @@
     border: 2px solid white;
     border-radius: 10px;
     width: 500px;
-    height: 500px;
+    height: auto;
     padding: 15px 10px;
     display: flex;
     flex-direction: column;
