@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import authSlice from '@/store/auth-slice';
 import CSS from './ModalLogin.module.scss';
 import { loginUser } from '@/api/users';
+import ModalAreYouSure from './ModalAreYouSure';
 
 const ModalLogin = ({ show, handleClose }) => {
     //#region VARIABLESSTATES
@@ -14,6 +15,7 @@ const ModalLogin = ({ show, handleClose }) => {
         email: '',
         password: '',
     });
+    const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
     const router = useRouter();
     //#endregion
@@ -32,8 +34,13 @@ const ModalLogin = ({ show, handleClose }) => {
         if (res) {
             dispatch(authSlice.actions.login(res.user));
             router.push('/');
+        }else{
+            handleOpenModal(true);
         }
     };
+    const handleOpenModal = (value) => {
+        setOpen(value);
+    }
     //#endregion
 
     return (
@@ -77,6 +84,13 @@ const ModalLogin = ({ show, handleClose }) => {
                     </form>
                 </Fade>
             </Modal>
+            <ModalAreYouSure
+                title={'Fail to login'}
+                contentText={'User or password incorrect'}
+                open={open}
+                onSetOpen={handleOpenModal}
+                withOptions={false}
+            />
         </>
     );
 };

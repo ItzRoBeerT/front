@@ -20,7 +20,6 @@ function Home({ posts }) {
     const isMatch = useMediaQuery(theme.breakpoints.down("sm"));
     const padreRef = useRef(null);
 
-    console.log({isMatch});
     //#region FUNCTIONS
     useEffect(() => {
         if (padreRef.current === null ) return;
@@ -108,7 +107,6 @@ function Home({ posts }) {
 
     const handleCloseComment = () => setOpenComment(false);
 
-    console.log({postsState});
     //#endregion
     return (
         <>

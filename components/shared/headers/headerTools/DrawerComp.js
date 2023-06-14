@@ -36,7 +36,9 @@ const DrawerComp = ({user}) => {
     };
 
     const logout = async () => {
+
         const res = await logoutUser(token);
+        console.log({res, token});
         if (res) {
             dispatch(authSlice.actions.logout());
             router.push('/');

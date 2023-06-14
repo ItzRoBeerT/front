@@ -47,7 +47,7 @@ const ProfileHeader = ({ user, posts, friends, onDeletePost }) => {
     };
 
     const goToSettings = () => {
-        router.push('/settings/'+user.nickname);
+        router.push('/settings/' + user.nickname);
     };
 
     //#endregion
@@ -56,7 +56,9 @@ const ProfileHeader = ({ user, posts, friends, onDeletePost }) => {
             <div className="avatar y editar o seguir">
                 <CustomAvatar user={user} />
                 {actualUser?._id === user._id ? (
-                    <Button variant="outlined" onClick={goToSettings}>Edit profile</Button>
+                    <Button variant="outlined" onClick={goToSettings}>
+                        Edit profile
+                    </Button>
                 ) : !isFollowing ? (
                     <Button variant="outlined" onClick={addFriendHandler}>
                         Follow
@@ -79,7 +81,11 @@ const ProfileHeader = ({ user, posts, friends, onDeletePost }) => {
                 </div>
             )}
             <div className="seguidores ">
-                <Typography className={CSS.text}>Following {user.friends.length} users ! </Typography>
+                {user.friends.length > 0 ? (
+                    <Typography className={CSS.text}>Following {user.friends.length} users ! </Typography>
+                ) : (
+                    <Typography className={CSS.text}>No following users yet ! </Typography>
+                )}
             </div>
             <Divider className={CSS.divider} />
             <div className={CSS.tabsContent}>
@@ -87,13 +93,11 @@ const ProfileHeader = ({ user, posts, friends, onDeletePost }) => {
             </div>
             {tabsValue === 0 ? (
                 <div className={CSS.postsContent}>
-                    {posts.map((post) => (
-                        <Post key={post._id} post={post} onDeletePost={onDeletePost} />
-                    ))}
+                    {posts.length > 0 ? posts.map((post) => <Post key={post._id} post={post} onDeletePost={onDeletePost} />) : <Typography variant='h2' className={CSS.text}>No posts yet ! </Typography>}
                 </div>
             ) : (
-                <div >
-                    <List  sx={{display: 'flex', gap: '10px', flexDirection: 'column'}}>
+                <div>
+                    <List sx={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
                         {friends.map((friend) => (
                             <Follower key={friend._id} friend={friend} />
                         ))}
