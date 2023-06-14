@@ -87,7 +87,7 @@ const Post = ({ post, onDeletePost }) => {
                     <PostOptions post={post} usersPost={user} />
                 </Card>
             ) : (
-                <Card>
+                <Card className={CSS.card}>
                     <CardHeader>
                         <Skeleton variant="circular" width={40} height={40} />
                     </CardHeader>
