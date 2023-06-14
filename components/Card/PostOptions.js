@@ -45,7 +45,7 @@ const PostOptions = ({ post, usersPost }) => {
     const likePost = async () => {
         if (isUserLikedPost) {
             try {
-                const res = await axios.post(`http://localhost:3004/post/unlike/${post._id}`, null, config);
+                const res = await axios.post(`https://tfg-backend-k70e.onrender.com/post/unlike/${post._id}`, null, config);
                 setLikes(likes - 1);
                 setIsUserLikedPost(false);
             } catch (error) {
@@ -54,7 +54,7 @@ const PostOptions = ({ post, usersPost }) => {
             return;
         }
         try {
-            const res = await axios.post(`http://localhost:3004/post/like/${post._id}`, null, config);
+            const res = await axios.post(`https://tfg-backend-k70e.onrender.com/post/like/${post._id}`, null, config);
 
             setLikes(likes + 1);
             setIsUserLikedPost(true);

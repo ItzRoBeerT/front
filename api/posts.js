@@ -185,3 +185,21 @@ export const likePost = async (postId, token) => {
         console.log(error);
     }
 }
+
+export const dislikePost = async (postId, token) => {
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    try {
+        const res = await axios.post(BASE_URL + `post/unlike/${postId}`, {}, config);
+        if (res.status === 200) {
+            return res.data;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}

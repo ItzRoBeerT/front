@@ -77,6 +77,7 @@ const UserAvatar = ({ isStringAvatar = true }) => {
     };
 
     const logout = async () => {
+        console.log({ token });
         const res = await logoutUser(token);
         if (res) {
             dispatch(authSlice.actions.logout());

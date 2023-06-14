@@ -24,17 +24,14 @@ export const getAllNicknames = async () => {
 };
 
 export const loginUser = async (credentials) => {
-
-
     try {
         const res = await axios.post(`${BASE_URL}/user/login`, credentials);
 
-        if(res.data.token){
-            if (typeof window !== "undefined") {
-                localStorage.setItem("token", res.data.token);
-                localStorage.setItem("user", JSON.stringify(res.data.user));
+        if (res.data.token) {
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('token', res.data.token);
+                localStorage.setItem('user', JSON.stringify(res.data.user));
             }
-          
         }
         const token = res.data.token;
         const user = res.data.user;
@@ -43,7 +40,6 @@ export const loginUser = async (credentials) => {
         console.error(error);
         return null;
     }
-
 };
 
 export const getAllEmails = async () => {
@@ -129,7 +125,7 @@ export const updateUserInfo = async (user, token) => {
         },
     };
     try {
-        console.log({user});
+        console.log({ user });
         const res = await axios.patch(`${BASE_URL}/user/update`, user, config);
         const updatedUser = res.data;
         return updatedUser;
@@ -137,7 +133,7 @@ export const updateUserInfo = async (user, token) => {
         console.error(error);
         return null;
     }
-}
+};
 
 export const logoutUser = async (token) => {
     const config = {
@@ -147,18 +143,16 @@ export const logoutUser = async (token) => {
     };
     try {
         const res = await axios.post(`${BASE_URL}/user/logout`, {}, config);
-        if (res.status === 200) {
-            const user = res.data;
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            return user;
-        }
-      
+        const user = res.data;
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        return user;
+
     } catch (error) {
         console.error(error);
         return null;
     }
-}
+};
 
 export const deleteAccount = async (token) => {
     const config = {
@@ -174,7 +168,6 @@ export const deleteAccount = async (token) => {
             localStorage.removeItem('user');
             return user;
         }
-      
     } catch (error) {
         console.error(error);
         return null;

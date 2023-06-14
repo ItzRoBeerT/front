@@ -67,7 +67,6 @@ const SettingsForm = ({ user }) => {
         e.preventDefault();
         if (updates === {}) return;
 
-        console.log({confirmPwd, realPwd: updates.password});
         if (confirmPwd !== updates.password) {
             setErrorPwd(true);
             return;
