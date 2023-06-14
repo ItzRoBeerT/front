@@ -115,7 +115,7 @@ const ModalComment = ({ show, handleClose }) => {
                         </IconButton>}
                     </div>
                     <Button type="submit" variant="contained" color="primary">
-                        Comentar
+                        Post
                     </Button>
                 </form>
             </Fade>
