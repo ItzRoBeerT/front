@@ -10,7 +10,9 @@ import ModalLogin from "@/components/Modal/ModalLogin";
 import UserAvatar from "./headerTools/UserAvatar";
 import SearchPostBar from "./headerTools/SearchPostBar";
 import authSlice from "@/store/auth-slice";
+import pocketSM from "@/public/images/PocketSM.png";
 import ModalComment from "@/components/Modal/ModalComment";
+import Image from "next/image";
 
 const HeaderDefault = ({onChangePosts}) => {
     //#region VARIABLES
@@ -49,7 +51,7 @@ const HeaderDefault = ({onChangePosts}) => {
             <AppBar sx={{paddingRight: '0px !important'}} className={CSS.toolbar} >
                 <Toolbar>
                     <IconButton onClick={goToHome} sx={{ color: "white" }}>
-                        <HomeIcon />
+                        <Image src={pocketSM} width={40} height={40} alt="logo"/>
                     </IconButton>
                     <SearchPostBar />
                     {isMatch ? (

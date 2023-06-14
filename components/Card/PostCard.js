@@ -44,7 +44,7 @@ const PostCard = ({ post, usersPost }) => {
                     <div className={CSS.cardContent}>
                         {post.image && (
                             <div className={CSS.imageWrapper}>
-                                <CardMedia component="img" alt="prueba" height="200" image={post.image} className={CSS.postImage} />
+                                <CardMedia component="img" alt="prueba" image={post.image} className={CSS.postImage} />
                             </div>
                         )}
                     </div>
